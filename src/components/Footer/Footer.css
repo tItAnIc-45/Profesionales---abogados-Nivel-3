@@ -1,0 +1,148 @@
+/* ==========================================================================
+   Footer institucional
+   ========================================================================== */
+
+footer {
+  position: relative;
+  /* Espacio inferior extra para que la última línea no quede bajo los
+     botones flotantes (WhatsApp y volver arriba). */
+  padding: clamp(3rem, 6vw, 4.5rem) 0 clamp(4.5rem, 7vw, 5.75rem);
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
+  opacity: 0.65;
+}
+
+footer::after {
+  content: '';
+  position: absolute;
+  top: -140px;
+  left: 50%;
+  width: 620px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent-gold) 10%, transparent), transparent 65%);
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.footer-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.7fr 1fr 1fr 1.2fr;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: 2.5rem;
+}
+
+.footer-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 1rem;
+  color: var(--text-light);
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  transition: color var(--t-fast);
+}
+
+.footer-logo i {
+  color: var(--accent-gold);
+  font-size: 1.35rem;
+}
+
+.footer-logo:hover {
+  color: var(--accent-gold);
+}
+
+.footer-desc {
+  max-width: 42ch;
+  margin-bottom: 1.5rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+
+.footer-title {
+  margin-bottom: 1.1rem;
+  color: var(--accent-gold);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.footer-links {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 0.7rem;
+}
+
+.footer-links a {
+  display: inline-block;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  transition: color var(--t-fast), transform var(--t-fast);
+}
+
+.footer-links a:hover {
+  color: var(--accent-gold);
+  transform: translateX(4px);
+}
+
+.footer-doc-text {
+  color: var(--text-muted);
+  font-size: 0.84rem;
+  line-height: 1.7;
+}
+
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 1.6rem;
+  border-top: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}
+
+@media (max-width: 992px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.8rem;
+    text-align: left;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+}

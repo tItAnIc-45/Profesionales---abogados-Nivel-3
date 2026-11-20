@@ -1,0 +1,62 @@
+/* ==========================================================================
+   Páginas legales — lectura cómoda
+   ========================================================================== */
+
+.legal-page {
+  display: block;
+}
+
+.legal-section {
+  padding-block: clamp(3.5rem, 7vw, 6rem);
+  scroll-margin-top: 96px;
+}
+
+.legal-section:nth-child(even) {
+  background: var(--bg-secondary);
+  border-block: 1px solid var(--border-soft);
+}
+
+.legal-content {
+  max-width: 840px;
+  margin-inline: auto;
+  padding: clamp(1.5rem, 3.5vw, 2.6rem);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--surface-3) 22%, transparent), transparent 40%),
+    var(--surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.legal-content p {
+  margin-bottom: 1.2rem;
+  color: var(--text-muted);
+  font-size: 0.96rem;
+  line-height: 1.9;
+}
+
+.legal-content p:last-of-type {
+  margin-bottom: 1.6rem;
+}
+
+.legal-content h3 {
+  margin: 1.9rem 0 0.6rem;
+  color: var(--text-light);
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  line-height: 1.35;
+}
+
+.legal-content h3:first-child {
+  margin-top: 0;
+}
+
+.legal-back {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 640px) {
+  .legal-content {
+    padding: 1.35rem 1.2rem;
+  }
+}

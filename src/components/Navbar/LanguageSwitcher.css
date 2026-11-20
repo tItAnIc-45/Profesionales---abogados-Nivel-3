@@ -1,0 +1,180 @@
+/* ==========================================================================
+   Selector de idioma — botón con bandera + panel desplegable
+   ========================================================================== */
+
+.lang-switcher {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.lang-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  height: 40px;
+  padding: 0 0.72rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--r-pill);
+  background: var(--surface);
+  color: var(--text-light);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition:
+    background-color var(--t-fast),
+    color var(--t-fast),
+    border-color var(--t-fast),
+    transform var(--t-fast);
+}
+
+.lang-trigger:hover,
+.lang-trigger[aria-expanded='true'] {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold-light);
+  transform: translateY(-1px);
+}
+
+.lang-flag {
+  display: block;
+  width: 20px;
+  height: 14px;
+  border-radius: 2px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.22);
+}
+
+.lang-code {
+  line-height: 1;
+}
+
+.lang-chevron {
+  font-size: 0.52rem;
+  opacity: 0.65;
+  transition: transform var(--t-fast);
+}
+
+.lang-trigger[aria-expanded='true'] .lang-chevron {
+  transform: rotate(180deg);
+}
+
+/* Panel ---------------------------------------------------------------- */
+
+.lang-panel {
+  position: absolute;
+  top: calc(100% + 0.65rem);
+  right: 0;
+  z-index: 1300;
+  width: 224px;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--accent-gold) 7%, transparent), transparent 55%),
+    var(--surface);
+  box-shadow: 0 26px 60px rgba(0, 0, 0, 0.45);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  animation: langPanelIn 0.18s var(--ease, ease-out);
+  transform-origin: top right;
+}
+
+@keyframes langPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.lang-panel-title {
+  display: block;
+  padding: 0.35rem 0.65rem 0.45rem;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.lang-list {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  width: 100%;
+  padding: 0.55rem 0.65rem;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text-light);
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color var(--t-fast),
+    color var(--t-fast);
+}
+
+.lang-option .lang-flag {
+  width: 22px;
+  height: 15px;
+}
+
+.lang-option:hover,
+.lang-option:focus-visible {
+  background: color-mix(in srgb, var(--accent-gold) 13%, transparent);
+  color: var(--accent-gold-light);
+  outline: none;
+}
+
+.lang-option.is-active {
+  background: color-mix(in srgb, var(--accent-gold) 9%, transparent);
+  color: var(--accent-gold);
+}
+
+.lang-name {
+  flex: 1 1 auto;
+}
+
+.lang-check {
+  font-size: 0.72rem;
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+
+.lang-check.is-visible {
+  opacity: 1;
+}
+
+@media (max-width: 960px) {
+  .lang-panel {
+    right: 0;
+    width: min(232px, calc(100vw - 2rem));
+  }
+}
+
+@media (max-width: 520px) {
+  .lang-trigger {
+    gap: 0.34rem;
+    padding: 0 0.55rem;
+  }
+
+  .lang-chevron {
+    display: none;
+  }
+}

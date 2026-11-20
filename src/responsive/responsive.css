@@ -1,0 +1,267 @@
+/* ==========================================================================
+   Responsive global — TuPlus Abogados
+   Breakpoints: 1200 · 992 · 768 · 640 · 420
+   ========================================================================== */
+
+/* Contenido bajo el header fijo en páginas internas ---------------------- */
+
+main > section:first-child:not(.hero),
+main > div > section:first-child:not(.hero) {
+  padding-top: calc(var(--header-h) + var(--space-section));
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 1200px
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 1200px) {
+  .nav-links {
+    gap: 0.9rem;
+  }
+
+  .nav-links a {
+    font-size: 0.72rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   961–1366 px — barra compacta
+   El francés ("Domaines d’activité") ocupa más ancho que ES/EN, así que la
+   tipografía del menú baja un punto para que el botón de consulta nunca se
+   recorte en laptops de 1280 px.
+   -------------------------------------------------------------------------- */
+
+@media (min-width: 961px) and (max-width: 1366px) {
+  .logo {
+    font-size: 1rem;
+    letter-spacing: 0.05em;
+  }
+
+  .logo i {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
+  }
+
+  .nav-links {
+    gap: 0.7rem;
+  }
+
+  .nav-links a {
+    font-size: 0.68rem;
+    letter-spacing: 0.04em;
+  }
+
+  .nav-actions {
+    gap: 0.4rem;
+    margin-left: 0.5rem;
+  }
+
+  .nav-actions .btn-gold {
+    padding: 0.65rem 0.95rem;
+    font-size: 0.68rem;
+  }
+}
+
+@media (min-width: 961px) and (max-width: 1180px) {
+  .logo {
+    font-size: 0.95rem;
+    letter-spacing: 0.04em;
+  }
+
+  .logo i {
+    width: 34px;
+    height: 34px;
+    font-size: 0.9rem;
+  }
+
+  .nav-links {
+    gap: 0.55rem;
+  }
+
+  .nav-links a {
+    font-size: 0.64rem;
+    letter-spacing: 0.03em;
+  }
+
+  .nav-actions {
+    gap: 0.35rem;
+    margin-left: 0.4rem;
+  }
+
+  .lang-trigger {
+    gap: 0.3rem;
+    padding: 0 0.5rem;
+  }
+
+  .lang-code {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 992px
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 992px) {
+  .section-header {
+    margin-bottom: 2.5rem;
+  }
+
+  .services-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  }
+
+  .equipo-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  }
+
+  .firma-grid,
+  .contact-grid,
+  .calc-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 768px
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 768px) {
+  :root {
+    --space-section: clamp(3.5rem, 9vw, 5rem);
+  }
+
+  .section-title {
+    font-size: clamp(1.7rem, 6vw, 2.2rem);
+  }
+
+  .section-desc {
+    font-size: 0.98rem;
+  }
+
+  .section-tag {
+    letter-spacing: 0.2em;
+  }
+
+  .calculator-container {
+    padding: 1.4rem;
+  }
+
+  .hero-trust {
+    gap: 1.2rem 2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 640px
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+  .container {
+    padding-inline: 1.1rem;
+  }
+
+  .section-header {
+    margin-bottom: 2rem;
+  }
+
+  .section-title {
+    font-size: clamp(1.6rem, 7.5vw, 2rem);
+  }
+
+  .btn-gold,
+  .btn-outline {
+    padding: 0.82rem 1.3rem;
+    font-size: 0.84rem;
+  }
+
+  .form-control {
+    font-size: 1rem; /* evita el zoom automático de iOS */
+  }
+
+  .modal,
+  .modal-overlay,
+  .modal-backdrop {
+    padding: 0.75rem;
+  }
+
+  .modal-content,
+  .modal-container,
+  .modal-custom-box {
+    max-height: 92vh;
+  }
+
+  .footer-bottom {
+    gap: 0.4rem;
+  }
+
+  /* Botones flotantes */
+  .whatsapp-float {
+    right: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    width: 52px;
+    height: 52px;
+    font-size: 25px;
+  }
+
+  .btn-scroll-top-left {
+    left: 14px;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   ≤ 420px
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 420px) {
+  .logo {
+    gap: 0.45rem;
+    font-size: 0.92rem;
+    letter-spacing: 0.06em;
+  }
+
+  .logo i {
+    width: 36px;
+    height: 36px;
+    border-radius: 11px;
+    font-size: 0.95rem;
+  }
+
+  .lang-trigger {
+    padding: 0 0.6rem;
+  }
+
+  .hero-title {
+    font-size: clamp(1.85rem, 9.5vw, 2.3rem);
+  }
+
+  .section-title {
+    font-size: 1.55rem;
+  }
+
+  .hero-trust-item strong {
+    font-size: 1.2rem;
+  }
+
+  .calc-amount {
+    font-size: 2rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Accesibilidad
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .rm-bar,
+  .rm-backdrop,
+  .nav-links,
+  .hero-copy {
+    transition: none !important;
+    animation: none !important;
+  }
+}

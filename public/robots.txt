@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Rutas internas sin contenido propio
+Disallow: /perfil

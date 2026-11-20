@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 20" role="img" aria-label="中国">
+  <rect width="30" height="20" fill="#DE2910"/>
+  <defs>
+    <path id="cn-star" d="M0,-3 L0.674,-0.927 L2.853,-0.927 L1.09,0.354 L1.763,2.427 L0,1.146 L-1.763,2.427 L-1.09,0.354 L-2.853,-0.927 L-0.674,-0.927 Z"/>
+  </defs>
+  <use href="#cn-star" fill="#FFDE00" transform="translate(5 5)"/>
+  <use href="#cn-star" fill="#FFDE00" transform="translate(9.6 1.8) scale(0.33) rotate(20)"/>
+  <use href="#cn-star" fill="#FFDE00" transform="translate(11.4 4.2) scale(0.33) rotate(45)"/>
+  <use href="#cn-star" fill="#FFDE00" transform="translate(11.4 6.6) scale(0.33) rotate(-45)"/>
+  <use href="#cn-star" fill="#FFDE00" transform="translate(9.6 9) scale(0.33) rotate(-20)"/>
+</svg>

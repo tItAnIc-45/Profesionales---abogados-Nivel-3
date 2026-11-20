@@ -1,0 +1,36 @@
+.btn-scroll-top-left {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--border-glow);
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold) 55%, var(--accent-gold-dark));
+  color: #0a0f18;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  box-shadow: 0 14px 30px rgba(212, 175, 55, 0.3);
+  transform: translateY(12px);
+  transition:
+    opacity var(--t),
+    visibility var(--t),
+    transform var(--t),
+    box-shadow var(--t);
+}
+
+.btn-scroll-top-left.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.btn-scroll-top-left:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 20px 40px rgba(212, 175, 55, 0.42);
+}
