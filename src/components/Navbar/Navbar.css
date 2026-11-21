@@ -309,7 +309,7 @@ html.rm-open .rm-bar:nth-child(3) {
     content: '\f0c0';
   }
   .nav-links a:not(.btn-gold)[href='/cotizador']::before {
-    content: '\f1ec';
+    content: '\f0b1';
   }
   .nav-links a:not(.btn-gold)[href='/contacto']::before {
     content: '\f0e0';

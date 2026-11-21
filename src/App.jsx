@@ -17,7 +17,6 @@ import './responsive/responsive.css'; // debe ir después de los CSS de los comp
 import useLanguage, { readLanguage } from './i18n/useLanguage';
 import { pick } from './i18n/languages';
 import './scripts/main.js';
-import './scripts/calculator.js';
 
 const pageTitles = {
   '/': {
@@ -45,10 +44,10 @@ const pageTitles = {
     zh: '团队 | TuPlus Abogados',
   },
   '/cotizador': {
-    es: 'Cotizador | TuPlus Abogados',
-    en: 'Calculator | TuPlus Abogados',
-    fr: 'Estimateur | TuPlus Abogados',
-    zh: '费用估算 | TuPlus Abogados',
+    es: 'Servicios y Honorarios | TuPlus Abogados',
+    en: 'Services & Fees | TuPlus Abogados',
+    fr: 'Services et honoraires | TuPlus Abogados',
+    zh: '服务与收费 | TuPlus Abogados',
   },
   '/contacto': {
     es: 'Contacto | TuPlus Abogados',

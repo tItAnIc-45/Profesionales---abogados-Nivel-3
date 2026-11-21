@@ -13,7 +13,7 @@ const links = [
     label: { es: 'Áreas de Práctica', en: 'Practice Areas', fr: 'Domaines d’activité', zh: '业务领域' },
   },
   { to: '/equipo', label: { es: 'Equipo', en: 'Team', fr: 'Équipe', zh: '团队' } },
-  { to: '/cotizador', label: { es: 'Cotizador', en: 'Calculator', fr: 'Estimateur', zh: '费用估算' } },
+  { to: '/cotizador', label: { es: 'Servicios', en: 'Services', fr: 'Services', zh: '服务' } },
   { to: '/contacto', label: { es: 'Contacto', en: 'Contact', fr: 'Contact', zh: '联系我们' } },
 ];
 

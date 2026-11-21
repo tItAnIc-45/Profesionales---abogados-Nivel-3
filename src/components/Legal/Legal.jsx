@@ -79,10 +79,10 @@ const legalSections = [
       {
         type: 'p',
         text: {
-          es: 'En TuPlus Abogados valoramos y respetamos su privacidad. Los datos proporcionados a través de nuestros formularios de contacto o calculadora de honorarios son tratados bajo rigurosos estándares de confidencialidad y secreto profesional.',
-          en: 'At TuPlus Abogados we value and respect your privacy. Data provided through our contact forms or fee calculator are handled under strict confidentiality and professional secrecy standards.',
-          fr: 'Chez TuPlus Abogados, nous valorisons et respectons votre vie privée. Les données fournies via nos formulaires de contact ou notre estimateur d’honoraires sont traitées selon des normes strictes de confidentialité et de secret professionnel.',
-          zh: 'TuPlus Abogados 重视并尊重您的隐私。通过联系表单或费用估算器提供的数据，均依照严格的保密与职业守密标准处理。',
+          es: 'En TuPlus Abogados valoramos y respetamos su privacidad. Los datos proporcionados a través de nuestros formularios de contacto o de solicitud de servicios y honorarios son tratados bajo rigurosos estándares de confidencialidad y secreto profesional.',
+          en: 'At TuPlus Abogados we value and respect your privacy. Data provided through our contact or service and fee request forms are handled under strict confidentiality and professional secrecy standards.',
+          fr: 'Chez TuPlus Abogados, nous valorisons et respectons votre vie privée. Les données fournies via nos formulaires de contact ou de demande de services et d’honoraires sont traitées selon des normes strictes de confidentialité et de secret professionnel.',
+          zh: 'TuPlus Abogados 重视并尊重您的隐私。通过联系表单或服务与费用申请表单提供的数据，均依照严格的保密与职业守密标准处理。',
         },
       },
     ],

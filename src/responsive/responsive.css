@@ -117,8 +117,7 @@ main > div > section:first-child:not(.hero) {
   }
 
   .firma-grid,
-  .contact-grid,
-  .calc-grid {
+  .contact-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }
@@ -245,10 +244,6 @@ main > div > section:first-child:not(.hero) {
 
   .hero-trust-item strong {
     font-size: 1.2rem;
-  }
-
-  .calc-amount {
-    font-size: 2rem;
   }
 }
 
