@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
+import { EXTRA_LAWYERS } from '../../data/lawyersExtra';
+import { PRACTICE_AREAS, SPECIALTY_OPTIONS } from '../../data/practiceAreas';
 import './Equipo.css';
 
-function getInitials(name = '') {
+export function getInitials(name = '') {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return 'TP';
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
@@ -11,6 +13,14 @@ function getInitials(name = '') {
   // Nombre + primer apellido (el último término suele ser el segundo apellido).
   return `${parts[0][0]}${parts[parts.length - 2][0]}`.toUpperCase();
 }
+
+const normalize = (value = '') =>
+  value
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
 
 const ui = {
   sub: {
@@ -76,6 +86,30 @@ const ui = {
     en: 'Send email',
     fr: 'Envoyer un e-mail',
     zh: '发送邮件',
+  },
+  filterLabel: {
+    es: 'Filtrar por especialidad',
+    en: 'Filter by specialty',
+    fr: 'Filtrer par spécialité',
+    zh: '按专业领域筛选',
+  },
+  allSpecialties: {
+    es: 'Todas las especialidades',
+    en: 'All specialties',
+    fr: 'Toutes les spécialités',
+    zh: '全部专业领域',
+  },
+  specialties: {
+    es: 'Especialidades:',
+    en: 'Specialties:',
+    fr: 'Spécialités :',
+    zh: '专业领域：',
+  },
+  results: {
+    es: 'profesionales',
+    en: 'professionals',
+    fr: 'professionnels',
+    zh: '位专业人士',
   },
 };
 
@@ -432,8 +466,33 @@ const abogadosList = [
   },
 ];
 
+// Los seis perfiles históricos se integran al mismo esquema del resto del
+// equipo para que el filtro por especialidad funcione de forma uniforme.
+const EXISTING_SPECIALTIES = {
+  1: ['civil-comercial'],
+  2: ['civil-comercial'],
+  3: ['civil-comercial'],
+  4: ['civil-comercial'],
+  5: ['inmobiliario', 'civil-comercial'],
+  6: ['civil-comercial'],
+};
+
+export const TEAM = [
+  ...abogadosList.map((abogado) => ({
+    ...abogado,
+    specialties: EXISTING_SPECIALTIES[abogado.id] ?? [],
+  })),
+  ...EXTRA_LAWYERS,
+];
+
+const specialtyTitleBySlug = (slug) => {
+  const area = PRACTICE_AREAS.find((item) => item.slug === slug);
+  return area ? area.title : null;
+};
+
 export default function Equipo() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [specialty, setSpecialty] = useState('all');
   const [selectedAbogado, setSelectedAbogado] = useState(null);
   const lang = useLanguage();
 
@@ -452,6 +511,10 @@ export default function Equipo() {
     idiomas: pick(ui.idiomas, lang),
     noResults: pick(ui.noResults, lang),
     sendEmail: pick(ui.sendEmail, lang),
+    filterLabel: pick(ui.filterLabel, lang),
+    allSpecialties: pick(ui.allSpecialties, lang),
+    specialties: pick(ui.specialties, lang),
+    results: pick(ui.results, lang),
   };
 
   // Bloquea el scroll del fondo y permite cerrar con Escape.
@@ -472,12 +535,20 @@ export default function Equipo() {
     };
   }, [selectedAbogado]);
 
-  const filteredAbogados = abogadosList.filter((abogado) => {
-    const term = searchTerm.toLowerCase();
-    return (
-      abogado.nombre.toLowerCase().includes(term) ||
-      pick(abogado.cargo, lang).toLowerCase().includes(term)
-    );
+  const filteredAbogados = TEAM.filter((abogado) => {
+    const term = normalize(searchTerm);
+    const matchesText =
+      !term ||
+      normalize(abogado.nombre).includes(term) ||
+      normalize(pick(abogado.cargo, lang)).includes(term) ||
+      abogado.specialties.some((slug) =>
+        normalize(pick(specialtyTitleBySlug(slug) ?? {}, lang)).includes(term),
+      );
+
+    const matchesSpecialty =
+      specialty === 'all' || abogado.specialties.includes(specialty);
+
+    return matchesText && matchesSpecialty;
   });
 
   const bio = selectedAbogado
@@ -503,18 +574,47 @@ export default function Equipo() {
             {t.desc}
           </p>
 
-          {/* BUSCADOR */}
-          <div className="equipo-search">
-            <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-            <input
-              type="text"
-              className="search-input"
-              placeholder={t.searchPlaceholder}
-              aria-label={t.searchPlaceholder}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          {/* BUSCADOR + FILTRO POR ESPECIALIDAD */}
+          <div className="equipo-filters">
+            <div className="equipo-search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="text"
+                className="search-input"
+                placeholder={t.searchPlaceholder}
+                aria-label={t.searchPlaceholder}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <div className="equipo-specialty">
+              <label htmlFor="specialtyFilter" className="equipo-specialty-label">
+                <i className="fa-solid fa-filter" aria-hidden="true" />
+                {t.filterLabel}
+              </label>
+              <div className="select-wrap">
+                <select
+                  id="specialtyFilter"
+                  className="specialty-select"
+                  value={specialty}
+                  onChange={(e) => setSpecialty(e.target.value)}
+                >
+                  <option value="all">{t.allSpecialties}</option>
+                  {SPECIALTY_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {pick(option.label, lang)}
+                    </option>
+                  ))}
+                </select>
+                <i className="fa-solid fa-chevron-down" aria-hidden="true" />
+              </div>
+            </div>
           </div>
+
+          <p className="equipo-results" role="status" aria-live="polite">
+            {filteredAbogados.length} {t.results}
+          </p>
         </div>
 
         {/* GRID DE TARJETAS */}
@@ -526,16 +626,18 @@ export default function Equipo() {
                 <span className="abogado-monogram" aria-hidden="true">
                   {getInitials(abogado.nombre)}
                 </span>
-                <img
-                  src={abogado.img}
-                  alt={abogado.nombre}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={(e) => e.currentTarget.classList.add('is-loaded')}
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+                {abogado.img && (
+                  <img
+                    src={abogado.img}
+                    alt={abogado.nombre}
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={(e) => e.currentTarget.classList.add('is-loaded')}
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                )}
               </div>
               <div className="abogado-card-body">
                 <span className="socio-tag">{pick(abogado.cargo, lang)}</span>
@@ -544,6 +646,16 @@ export default function Equipo() {
                   <i className="fa-solid fa-envelope" aria-hidden="true" />
                   <span>{abogado.email}</span>
                 </div>
+                <ul className="abogado-specialties" aria-label={t.specialties}>
+                  {abogado.specialties.map((slug) => {
+                    const title = specialtyTitleBySlug(slug);
+                    return title ? (
+                      <li key={slug} className="specialty-pill">
+                        {pick(title, lang)}
+                      </li>
+                    ) : null;
+                  })}
+                </ul>
                 <div className="card-social-actions">
                   <button
                     type="button"
@@ -605,6 +717,18 @@ export default function Equipo() {
             </div>
 
             <div className="modal-custom-body">
+              {bio.specialties && bio.specialties.length > 0 && (
+                <div className="bio-block">
+                  <h3>{t.specialties}</h3>
+                  <ul className="modal-specialty-list">
+                    {bio.specialties.map((slug) => {
+                      const title = specialtyTitleBySlug(slug);
+                      return title ? <li key={slug}>{pick(title, lang)}</li> : null;
+                    })}
+                  </ul>
+                </div>
+              )}
+
               {bio.formacion && bio.formacion.length > 0 && (
                 <div className="bio-block">
                   <h3>{t.formacion}</h3>

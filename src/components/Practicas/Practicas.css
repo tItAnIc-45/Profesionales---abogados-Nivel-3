@@ -2,6 +2,10 @@
    Áreas de práctica — tarjetas premium con numeración
    ========================================================================== */
 
+.practicas-section {
+  padding-block: var(--space-section);
+}
+
 .services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
@@ -102,6 +106,30 @@
   color: var(--text-muted);
   font-size: 0.94rem;
   line-height: 1.75;
+}
+
+.service-bullets {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0 0 1.4rem;
+  padding: 0;
+  list-style: none;
+}
+
+.service-bullets li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+}
+
+.service-bullets i {
+  flex: 0 0 auto;
+  margin-top: 0.2rem;
+  color: var(--accent-gold);
+  font-size: 0.68rem;
 }
 
 .service-link {

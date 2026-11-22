@@ -120,6 +120,105 @@
   color: var(--accent-gold);
 }
 
+/* Desplegable de áreas --------------------------------------------------- */
+
+.nav-item.has-dropdown {
+  position: relative;
+}
+
+.nav-link-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.nav-dropdown-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.58rem;
+  cursor: pointer;
+  transition: color var(--t-fast), transform var(--t-fast);
+}
+
+.nav-dropdown-toggle:hover,
+.nav-dropdown-toggle:focus-visible {
+  color: var(--accent-gold);
+}
+
+.nav-item.is-open .nav-dropdown-toggle,
+.nav-item:hover .nav-dropdown-toggle {
+  color: var(--accent-gold);
+}
+
+.nav-item.is-open .nav-dropdown-toggle {
+  transform: rotate(180deg);
+}
+
+.nav-dropdown {
+  position: absolute;
+  top: calc(100% + 14px);
+  left: 50%;
+  z-index: 20;
+  display: grid;
+  gap: 0.15rem;
+  min-width: 310px;
+  padding: 0.55rem;
+  background: var(--surface);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, 8px);
+  transition: opacity var(--t-fast), visibility 0s linear var(--t-fast), transform var(--t-fast);
+}
+
+.nav-item:hover .nav-dropdown,
+.nav-item.is-open .nav-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition: opacity var(--t-fast), visibility 0s, transform var(--t-fast);
+}
+
+.nav-links .nav-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.7rem;
+  border-radius: var(--r-sm);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  white-space: normal;
+}
+
+.nav-links .nav-dropdown a::after {
+  display: none;
+}
+
+.nav-links .nav-dropdown a:hover,
+.nav-links .nav-dropdown a:focus-visible,
+.nav-links .nav-dropdown a.active {
+  background: color-mix(in srgb, var(--accent-gold) 8%, transparent);
+  color: var(--accent-gold);
+}
+
+.nav-links .nav-dropdown a i {
+  flex: 0 0 1.1rem;
+  color: var(--accent-gold);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
 /* Acciones -------------------------------------------------------------- */
 
 .nav-actions {
@@ -262,6 +361,72 @@ html.rm-open .rm-bar:nth-child(3) {
 
   .nav-links li {
     width: 100%;
+  }
+
+  .nav-link-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: stretch;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .nav-link-row > a {
+    flex: 1;
+    border-bottom: 0;
+  }
+
+  .nav-dropdown-toggle {
+    flex: 0 0 46px;
+    width: 46px;
+    height: auto;
+    min-height: 48px;
+    color: var(--accent-gold);
+    font-size: 0.7rem;
+  }
+
+  .nav-item .nav-dropdown {
+    position: static;
+    top: auto;
+    left: auto;
+    display: none;
+    min-width: 0;
+    padding: 0.25rem 0 0.55rem 0.9rem;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .nav-item:hover .nav-dropdown {
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .nav-item.is-open .nav-dropdown {
+    display: grid;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .nav-links .nav-dropdown a {
+    padding: 0.7rem 0.55rem;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 0.88rem;
+    font-weight: 500;
+  }
+
+  .nav-links .nav-dropdown a::before {
+    display: none;
+  }
+
+  .nav-links .nav-dropdown li:last-child a {
+    border-bottom: 0;
   }
 
   .nav-links a {

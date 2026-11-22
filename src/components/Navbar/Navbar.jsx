@@ -1,7 +1,9 @@
-import { NavLink } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
 import { MENU_ID, MenuBackdrop, MenuToggle, useResponsiveMenu } from '../../responsive';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
+import { PRACTICE_AREAS } from '../../data/practiceAreas';
 import LanguageSwitcher from './LanguageSwitcher';
 import './Navbar.css';
 
@@ -24,10 +26,38 @@ const ctaLabels = {
   zh: '法律咨询',
 };
 
+const dropdownLabels = {
+  open: { es: 'Mostrar áreas de práctica', en: 'Show practice areas', fr: 'Afficher les domaines', zh: '显示业务领域' },
+  close: { es: 'Ocultar áreas de práctica', en: 'Hide practice areas', fr: 'Masquer les domaines', zh: '隐藏业务领域' },
+};
+
 export default function Navbar() {
   const { open, label, menuRef, toggleRef, toggle, close, onMenuClick } = useResponsiveMenu();
+  const [areasOpen, setAreasOpen] = useState(false);
+  const areasRef = useRef(null);
   const lang = useLanguage();
+  const { pathname } = useLocation();
   const cta = pick(ctaLabels, lang);
+
+  useEffect(() => {
+    setAreasOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!areasOpen) return undefined;
+    const onKeyDown = (event) => {
+      if (event.key === 'Escape') setAreasOpen(false);
+    };
+    const onPointerDown = (event) => {
+      if (!areasRef.current?.contains(event.target)) setAreasOpen(false);
+    };
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('pointerdown', onPointerDown);
+    return () => {
+      document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('pointerdown', onPointerDown);
+    };
+  }, [areasOpen]);
 
   return (
     <header className="navbar-header">
@@ -38,13 +68,46 @@ export default function Navbar() {
         </NavLink>
 
         <ul className="nav-links" id={MENU_ID} ref={menuRef} onClick={onMenuClick}>
-          {links.map((link) => (
-            <li key={link.to}>
-              <NavLink to={link.to} end={link.to === '/'} className={({ isActive }) => (isActive ? 'active' : '')}>
-                {pick(link.label, lang)}
-              </NavLink>
-            </li>
-          ))}
+          {links.map((link) =>
+            link.to === '/areas' ? (
+              <li key={link.to} ref={areasRef} className={`nav-item has-dropdown${areasOpen ? ' is-open' : ''}`}>
+                <div className="nav-link-row">
+                  <NavLink
+                    to={link.to}
+                    className={({ isActive }) => (isActive || pathname.startsWith('/areas/') ? 'active' : '')}
+                  >
+                    {pick(link.label, lang)}
+                  </NavLink>
+                  <button
+                    type="button"
+                    className="nav-dropdown-toggle"
+                    aria-expanded={areasOpen}
+                    aria-controls="areasSubmenu"
+                    aria-label={pick(areasOpen ? dropdownLabels.close : dropdownLabels.open, lang)}
+                    onClick={() => setAreasOpen((value) => !value)}
+                  >
+                    <i className="fa-solid fa-chevron-down" aria-hidden="true" />
+                  </button>
+                </div>
+                <ul className="nav-dropdown" id="areasSubmenu">
+                  {PRACTICE_AREAS.map((area) => (
+                    <li key={area.slug}>
+                      <NavLink to={`/areas/${area.slug}`}>
+                        <i className={area.icon} aria-hidden="true" />
+                        <span>{pick(area.navLabel, lang)}</span>
+                      </NavLink>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            ) : (
+              <li key={link.to}>
+                <NavLink to={link.to} end={link.to === '/'} className={({ isActive }) => (isActive ? 'active' : '')}>
+                  {pick(link.label, lang)}
+                </NavLink>
+              </li>
+            ),
+          )}
           {/* Solo se ve en teléfono, dentro del menú deslizante */}
           <li className="rm-drawer-cta">
             <NavLink to="/contacto" className="btn-gold">
