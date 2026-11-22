@@ -1,0 +1,211 @@
+/* ==========================================================================
+   PrivacyModal — política de privacidad en diálogo accesible
+   ========================================================================== */
+
+.privacy-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 3vw, 2rem);
+  background: rgba(3, 7, 13, 0.84);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+}
+
+.privacy-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 720px;
+  max-height: 88vh;
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--accent-gold) 6%, transparent), transparent 30%),
+    var(--surface);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  animation: privacyFadeIn 0.3s ease;
+}
+
+@keyframes privacyFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.privacy-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--border-soft);
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: color var(--t-fast), border-color var(--t-fast), transform var(--t-fast);
+}
+
+.privacy-close:hover {
+  color: var(--accent-gold);
+  border-color: var(--accent-gold);
+  transform: rotate(90deg);
+}
+
+.privacy-close:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+}
+
+.privacy-header {
+  padding: 1.8rem 2rem 1.1rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.privacy-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.6rem;
+  color: var(--accent-gold);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.privacy-header h2 {
+  padding-right: 2.6rem;
+  color: var(--text-light);
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.6vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.privacy-updated {
+  margin-top: 0.5rem;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+}
+
+.privacy-body {
+  flex-grow: 1;
+  padding: 1.4rem 2rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.privacy-intro {
+  margin-bottom: 1.4rem;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+
+.privacy-block {
+  margin-bottom: 1.25rem;
+}
+
+.privacy-block h3 {
+  margin-bottom: 0.4rem;
+  color: var(--accent-gold);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.privacy-block p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1.75;
+}
+
+.privacy-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 2rem 1.3rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.privacy-footer .btn-gold {
+  padding: 0.7rem 1.7rem;
+}
+
+/* Enlace que abre la política desde formularios --------------------------- */
+
+.privacy-link {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent-gold);
+  font: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.privacy-link:hover {
+  color: var(--accent-gold-light);
+}
+
+.privacy-link:focus-visible {
+  outline: 2px solid var(--accent-gold);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.form-privacy-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin: 0.75rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.form-privacy-note i {
+  margin-top: 0.18rem;
+  color: var(--accent-gold);
+}
+
+@media (max-width: 640px) {
+  .privacy-dialog {
+    max-height: 92vh;
+  }
+
+  .privacy-header {
+    padding: 1.5rem 1.25rem 1rem;
+  }
+
+  .privacy-body {
+    padding: 1.2rem 1.25rem;
+  }
+
+  .privacy-footer {
+    padding: 0.9rem 1.25rem 1.15rem;
+  }
+
+  .privacy-footer .btn-gold {
+    width: 100%;
+  }
+}

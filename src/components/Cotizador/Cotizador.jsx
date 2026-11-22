@@ -1,6 +1,7 @@
 import { useId, useRef, useState } from 'react';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
+import PrivacyModal from '../Privacy/PrivacyModal';
 import './Cotizador.css';
 
 const formspreeUrl =
@@ -337,6 +338,24 @@ const copy = {
     fr: 'Vos données sont en sécurité avec nous.',
     zh: '您的信息将受到安全保护。',
   },
+  consent: {
+    es: 'Acepto la Política de Privacidad y el tratamiento de mis datos para atender esta consulta.',
+    en: 'I accept the Privacy Policy and the processing of my data to handle this inquiry.',
+    fr: 'J’accepte la politique de confidentialité et le traitement de mes données pour répondre à cette demande.',
+    zh: '我同意《隐私政策》，并同意为处理本次咨询而处理我的数据。',
+  },
+  consentLink: {
+    es: 'Ver política',
+    en: 'View policy',
+    fr: 'Voir la politique',
+    zh: '查看政策',
+  },
+  sensitiveNote: {
+    es: 'No incluyas datos sensibles, documentos de identidad ni información reservada en este formulario.',
+    en: 'Do not include sensitive data, identity documents or privileged information in this form.',
+    fr: 'N’incluez pas de données sensibles, de documents d’identité ni d’informations confidentielles dans ce formulaire.',
+    zh: '请勿在此表单中填写敏感数据、身份证件或保密信息。',
+  },
   mailSubject: {
     es: 'Solicitud de cotización',
     en: 'Quote request',
@@ -356,6 +375,12 @@ const copy = {
       fr: 'Nous n’avons pas pu envoyer votre demande. Réessayez ou écrivez-nous à contacto@tuplusabogados.com.pe.',
       zh: '无法提交您的申请。请重试或发送邮件至 contacto@tuplusabogados.com.pe。',
     },
+    consent: {
+      es: 'Para enviar tu solicitud debes aceptar la Política de Privacidad.',
+      en: 'To send your request you must accept the Privacy Policy.',
+      fr: 'Pour envoyer votre demande, vous devez accepter la politique de confidentialité.',
+      zh: '提交申请前，请先同意《隐私政策》。',
+    },
     email: {
       es: 'Abrimos tu cliente de correo. Si no se abre, escríbenos a contacto@tuplusabogados.com.pe.',
       en: 'We opened your email client. If it does not open, email us at contacto@tuplusabogados.com.pe.',
@@ -373,11 +398,14 @@ export default function Cotizador() {
   const [service, setService] = useState('');
   const [message, setMessage] = useState('');
   const [contact, setContact] = useState('');
+  const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState('idle');
+  const [privacyOpen, setPrivacyOpen] = useState(false);
 
   const serviceId = `${uid}-service`;
   const messageId = `${uid}-message`;
   const contactId = `${uid}-contact`;
+  const consentId = `${uid}-consent`;
   const noteId = `${uid}-note`;
   const statusId = `${uid}-status`;
 
@@ -393,6 +421,11 @@ export default function Cotizador() {
 
     if (!selectedService) {
       setStatus('error');
+      return;
+    }
+
+    if (!consent) {
+      setStatus('consent');
       return;
     }
 
@@ -429,6 +462,7 @@ export default function Cotizador() {
       setService('');
       setMessage('');
       setContact('');
+      setConsent(false);
       setStatus('sent');
     } catch {
       setStatus('error');
@@ -445,7 +479,7 @@ export default function Cotizador() {
   const statusClass =
     status === 'sent'
       ? 'sp-quote-status--ok'
-      : status === 'error'
+      : status === 'error' || status === 'consent'
         ? 'sp-quote-status--error'
         : 'sp-quote-status--info';
 
@@ -587,6 +621,37 @@ export default function Cotizador() {
               <i className="fa-solid fa-arrow-right" aria-hidden="true" />
             </button>
 
+            <div className="sp-consent">
+              <div className="form-check">
+                <input
+                  id={consentId}
+                  name="privacidad"
+                  type="checkbox"
+                  value="Aceptada"
+                  checked={consent}
+                  required
+                  onChange={(event) => {
+                    setConsent(event.target.checked);
+                    clearStatus();
+                  }}
+                />
+                <div>
+                  <label htmlFor={consentId}>{pick(copy.consent, lang)}</label>{' '}
+                  <button
+                    type="button"
+                    className="privacy-link"
+                    onClick={() => setPrivacyOpen(true)}
+                  >
+                    {pick(copy.consentLink, lang)}
+                  </button>
+                </div>
+              </div>
+              <p className="form-privacy-note">
+                <i className="fa-solid fa-shield-halved" aria-hidden="true" />
+                <span>{pick(copy.sensitiveNote, lang)}</span>
+              </p>
+            </div>
+
             <p className="sp-quote-note" id={noteId}>
               <i className="fa-solid fa-lock" aria-hidden="true" />
               <span>{pick(copy.note, lang)}</span>
@@ -604,6 +669,8 @@ export default function Cotizador() {
           </form>
         </div>
       </div>
+
+      <PrivacyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
     </section>
   );
 }
