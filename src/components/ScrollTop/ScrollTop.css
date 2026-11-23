@@ -34,3 +34,12 @@
   transform: translateY(-3px);
   box-shadow: 0 20px 40px rgba(212, 175, 55, 0.42);
 }
+
+@media (max-width: 768px) {
+  .btn-scroll-top-left {
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    left: 14px;
+    width: 42px;
+    height: 42px;
+  }
+}

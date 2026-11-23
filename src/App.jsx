@@ -10,6 +10,7 @@ import Cotizador from './components/Cotizador/Cotizador';
 import Contacto from './components/Contacto/Contacto';
 import Home from './components/Home/Home';
 import WhatsappFloat from './components/WhatsappFloat/WhatsappFloat';
+import MobileCta from './components/MobileCta/MobileCta';
 import { getPracticeArea } from './data/practiceAreas';
 
 import Footer from './components/Footer/Footer';
@@ -164,6 +165,7 @@ export default function App() {
 
       <Navbar />
       <WhatsappFloat />
+      <MobileCta />
       <ScrollTop />
 
       <main id="main">

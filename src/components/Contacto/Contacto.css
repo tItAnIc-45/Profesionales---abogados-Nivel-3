@@ -100,6 +100,24 @@
   margin-bottom: 1.25rem;
 }
 
+.contact-promise {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  padding: 0.5rem 0.9rem;
+  background: color-mix(in srgb, var(--accent-gold) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 22%, transparent);
+  border-radius: var(--r-pill);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.contact-promise i {
+  color: var(--accent-gold);
+}
+
 @media (max-width: 992px) {
   .contact-grid {
     grid-template-columns: minmax(0, 1fr);

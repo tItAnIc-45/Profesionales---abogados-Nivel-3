@@ -26,6 +26,19 @@ const ui = {
     zh: '请告诉我们您的情况，我们将安排一次保密的初步评估。',
   },
   ctaButton: { es: 'Solicitar consulta', en: 'Request a consultation', fr: 'Demander une consultation', zh: '预约咨询' },
+  teamCta: {
+    es: 'Ver abogados del área',
+    en: 'Meet the area’s lawyers',
+    fr: 'Voir les avocats du domaine',
+    zh: '查看该领域律师',
+  },
+  quote: { es: 'Solicitar cotización', en: 'Request a quote', fr: 'Demander un devis', zh: '获取报价' },
+  response: {
+    es: 'Respuesta en menos de 24 horas hábiles',
+    en: 'Response within 24 business hours',
+    fr: 'Réponse sous 24 heures ouvrables',
+    zh: '24 个工作小时内回复',
+  },
   talk: { es: 'Habla con un especialista', en: 'Talk to a specialist', fr: 'Parler à un spécialiste', zh: '联系专家' },
   talkDesc: {
     es: 'Atención presencial y virtual. Primera orientación con reserva absoluta.',
@@ -76,6 +89,9 @@ export default function AreaDetalle() {
             <Link className="btn-gold" to="/contacto">
               {pick(ui.ctaButton, lang)}
             </Link>
+            <Link className="btn-outline" to={`/equipo?especialidad=${area.slug}`}>
+              {pick(ui.teamCta, lang)}
+            </Link>
             <Link className="area-back-link" to="/areas">
               <i className="fa-solid fa-arrow-left" aria-hidden="true" />
               {pick(ui.back, lang)}
@@ -111,8 +127,16 @@ export default function AreaDetalle() {
             <i className="fa-solid fa-scale-balanced" aria-hidden="true" />
             <h3>{pick(ui.talk, lang)}</h3>
             <p>{pick(ui.talkDesc, lang)}</p>
+            <p className="area-response">
+              <i className="fa-solid fa-clock" aria-hidden="true" />
+              {pick(ui.response, lang)}
+            </p>
             <Link className="btn-gold" to="/contacto">
               {pick(ui.ctaButton, lang)}
+            </Link>
+            <Link className="area-quote-link" to={`/cotizador?area=${area.slug}`}>
+              <i className="fa-solid fa-file-invoice-dollar" aria-hidden="true" />
+              {pick(ui.quote, lang)}
             </Link>
             <a className="area-phone" href="tel:+51999888777">
               <i className="fa-solid fa-phone" aria-hidden="true" />

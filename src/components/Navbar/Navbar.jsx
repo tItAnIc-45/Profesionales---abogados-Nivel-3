@@ -20,10 +20,10 @@ const links = [
 ];
 
 const ctaLabels = {
-  es: 'Consulta Legal',
-  en: 'Legal Consultation',
-  fr: 'Consultation juridique',
-  zh: '法律咨询',
+  es: 'Solicitar consulta',
+  en: 'Request a consultation',
+  fr: 'Demander une consultation',
+  zh: '预约咨询',
 };
 
 const dropdownLabels = {

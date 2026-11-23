@@ -1,6 +1,8 @@
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
+import { PRACTICE_AREAS } from '../../data/practiceAreas';
 import PrivacyModal from '../Privacy/PrivacyModal';
 import './Cotizador.css';
 
@@ -8,70 +10,22 @@ const formspreeUrl =
   import.meta.env.VITE_FORMSPREE_URL || import.meta.env.VITE_FORMSPREE_ENDPOINT || '';
 const hasFormspree = Boolean(formspreeUrl) && !formspreeUrl.includes('your-form-id');
 
-const services = [
-  {
-    id: 'civil',
-    icon: 'fa-solid fa-scale-balanced',
-    title: { es: 'Derecho Civil', en: 'Civil Law', fr: 'Droit civil', zh: '民法' },
-    desc: {
-      es: 'Contratos, propiedad, obligaciones, sucesiones y litigios civiles.',
-      en: 'Contracts, property, obligations, inheritance, and civil litigation.',
-      fr: 'Contrats, propriété, obligations, successions et contentieux civil.',
-      zh: '合同、财产、债务、继承及民事诉讼。',
-    },
-  },
-  {
-    id: 'penal',
-    icon: 'fa-solid fa-shield-halved',
-    title: { es: 'Derecho Penal', en: 'Criminal Law', fr: 'Droit pénal', zh: '刑法' },
-    desc: {
-      es: 'Defensa penal, delitos económicos, investigaciones y procesos judiciales.',
-      en: 'Criminal defense, economic crimes, investigations, and court proceedings.',
-      fr: 'Défense pénale, délits économiques, enquêtes et procédures judiciaires.',
-      zh: '刑事辩护、经济犯罪、调查及诉讼程序。',
-    },
-  },
-  {
-    id: 'laboral',
-    icon: 'fa-solid fa-briefcase',
-    title: { es: 'Derecho Laboral', en: 'Labor Law', fr: 'Droit du travail', zh: '劳动法' },
-    desc: {
-      es: 'Contratos, despidos, negociación colectiva y conflictos laborales.',
-      en: 'Contracts, dismissals, collective bargaining, and labor disputes.',
-      fr: 'Contrats, licenciements, négociation collective et conflits du travail.',
-      zh: '劳动合同、解雇、集体谈判及劳动争议。',
-    },
-  },
-  {
-    id: 'familiar',
-    icon: 'fa-solid fa-people-roof',
-    title: { es: 'Derecho Familiar', en: 'Family Law', fr: 'Droit de la famille', zh: '家庭法' },
-    desc: {
-      es: 'Divorcios, tenencia, alimentos, filiación y sucesiones familiares.',
-      en: 'Divorce, custody, child support, filiation, and family inheritance.',
-      fr: 'Divorces, garde, pension alimentaire, filiation et successions familiales.',
-      zh: '离婚、抚养权、抚养费、亲子关系及家庭继承。',
-    },
-  },
-  {
-    id: 'empresarial',
-    icon: 'fa-solid fa-building',
-    title: { es: 'Derecho Empresarial', en: 'Business Law', fr: 'Droit des affaires', zh: '企业法' },
-    desc: {
-      es: 'Constitución de empresas, contratos comerciales, compliance y M&A.',
-      en: 'Company formation, commercial contracts, compliance, and M&A.',
-      fr: 'Création d’entreprises, contrats commerciaux, conformité et fusions-acquisitions.',
-      zh: '公司设立、商业合同、合规及并购。',
-    },
-  },
-];
+const services = PRACTICE_AREAS.map((area) => ({
+  id: area.slug,
+  icon: area.icon,
+  title: area.title,
+  desc: area.short,
+}));
 
 const otherService = {
   id: 'otro',
   title: { es: 'Otro', en: 'Other', fr: 'Autre', zh: '其他' },
 };
 
-const serviceOptions = [...services, otherService];
+const serviceOptions = [
+  ...PRACTICE_AREAS.map((area) => ({ id: area.slug, title: area.title })),
+  otherService,
+];
 
 const fees = [
   {
@@ -321,10 +275,10 @@ const copy = {
     zh: 'email@example.com / +51 999 888 777',
   },
   submit: {
-    es: 'Enviar solicitud',
-    en: 'Send request',
-    fr: 'Envoyer la demande',
-    zh: '提交申请',
+    es: 'Solicitar cotización',
+    en: 'Request a quote',
+    fr: 'Demander un devis',
+    zh: '获取报价',
   },
   sending: {
     es: 'Enviando...',
@@ -394,13 +348,27 @@ export default function Cotizador() {
   const lang = useLanguage();
   const uid = useId();
   const formRef = useRef(null);
+  const [searchParams] = useSearchParams();
 
-  const [service, setService] = useState('');
+  const initialArea = PRACTICE_AREAS.some((area) => area.slug === searchParams.get('area'))
+    ? searchParams.get('area')
+    : '';
+
+  const [service, setService] = useState(initialArea);
   const [message, setMessage] = useState('');
   const [contact, setContact] = useState('');
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState('idle');
   const [privacyOpen, setPrivacyOpen] = useState(false);
+
+  // Permite llegar desde una página de área con el servicio ya seleccionado:
+  // /cotizador?area=penal
+  useEffect(() => {
+    const areaParam = searchParams.get('area');
+    if (PRACTICE_AREAS.some((area) => area.slug === areaParam)) {
+      setService(areaParam);
+    }
+  }, [searchParams]);
 
   const serviceId = `${uid}-service`;
   const messageId = `${uid}-message`;

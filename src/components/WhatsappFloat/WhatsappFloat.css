@@ -52,3 +52,9 @@
     animation: none;
   }
 }
+
+@media (max-width: 768px) {
+  .whatsapp-float {
+    display: none;
+  }
+}

@@ -19,6 +19,12 @@ const privacyCopy = {
     fr: 'N’incluez pas de données sensibles, de documents d’identité ni d’informations confidentielles dans ce formulaire.',
     zh: '请勿在此表单中填写敏感数据、身份证件或保密信息。',
   },
+  promise: {
+    es: 'Respondemos en menos de 24 horas hábiles. Tu consulta es confidencial.',
+    en: 'We reply within 24 business hours. Your inquiry is confidential.',
+    fr: 'Nous répondons sous 24 heures ouvrables. Votre demande reste confidentielle.',
+    zh: '我们在 24 个工作小时内回复，您的咨询将严格保密。',
+  },
 };
 
 export default function Contacto() {
@@ -33,6 +39,10 @@ export default function Contacto() {
           <h2 className="section-title" data-lang="contact_title">Agende una Consulta</h2>
           <p className="section-desc" data-lang="contact_desc">
             Atención presencial en nuestra sede corporativa o virtual a través de videollamada.
+          </p>
+          <p className="contact-promise">
+            <i className="fa-solid fa-shield-halved" aria-hidden="true" />
+            <span>{pick(privacyCopy.promise, lang)}</span>
           </p>
         </div>
         <div className="contact-grid">

@@ -89,6 +89,7 @@
 }
 
 .home-area-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: clamp(1.4rem, 2.8vw, 1.9rem);
@@ -96,7 +97,27 @@
   border: 1px solid var(--border-soft);
   border-radius: var(--r-lg);
   color: var(--text-light);
+  overflow: hidden;
   transition: transform var(--t), border-color var(--t), box-shadow var(--t);
+}
+
+.home-area-index {
+  position: absolute;
+  top: 0.7rem;
+  right: 1.1rem;
+  color: var(--accent-gold);
+  font-family: var(--font-display);
+  font-size: 3.1rem;
+  font-weight: 700;
+  line-height: 1;
+  opacity: 0.12;
+  pointer-events: none;
+  transition: opacity var(--t), transform var(--t);
+}
+
+.home-area-card:hover .home-area-index {
+  opacity: 0.24;
+  transform: translateY(-3px);
 }
 
 .home-area-card:hover {
@@ -129,6 +150,23 @@
   color: var(--text-muted);
   font-size: 0.86rem;
   line-height: 1.7;
+}
+
+.home-area-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.1rem;
+}
+
+.home-area-tags li {
+  padding: 0.28rem 0.6rem;
+  background: color-mix(in srgb, var(--accent-gold) 7%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 18%, transparent);
+  border-radius: var(--r-pill);
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  line-height: 1.35;
 }
 
 .home-area-link {

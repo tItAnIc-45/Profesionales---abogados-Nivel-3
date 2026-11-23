@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
 import { EXTRA_LAWYERS } from '../../data/lawyersExtra';
@@ -491,10 +492,37 @@ const specialtyTitleBySlug = (slug) => {
 };
 
 export default function Equipo() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialSpecialty = SPECIALTY_OPTIONS.some(
+    (option) => option.value === searchParams.get('especialidad'),
+  )
+    ? searchParams.get('especialidad')
+    : 'all';
   const [searchTerm, setSearchTerm] = useState('');
-  const [specialty, setSpecialty] = useState('all');
+  const [specialty, setSpecialty] = useState(initialSpecialty);
   const [selectedAbogado, setSelectedAbogado] = useState(null);
   const lang = useLanguage();
+
+  // Mantiene el filtro sincronizado si se llega desde un enlace como
+  // /equipo?especialidad=penal o si cambia la URL con el componente montado.
+  useEffect(() => {
+    const param = searchParams.get('especialidad');
+    const nextSpecialty = SPECIALTY_OPTIONS.some((option) => option.value === param)
+      ? param
+      : 'all';
+    setSpecialty((current) => (current === nextSpecialty ? current : nextSpecialty));
+  }, [searchParams]);
+
+  const handleSpecialtyChange = (value) => {
+    setSpecialty(value);
+    const nextParams = new URLSearchParams(searchParams);
+    if (value === 'all') {
+      nextParams.delete('especialidad');
+    } else {
+      nextParams.set('especialidad', value);
+    }
+    setSearchParams(nextParams, { replace: true });
+  };
 
   const t = {
     sub: pick(ui.sub, lang),
@@ -598,7 +626,7 @@ export default function Equipo() {
                   id="specialtyFilter"
                   className="specialty-select"
                   value={specialty}
-                  onChange={(e) => setSpecialty(e.target.value)}
+                  onChange={(e) => handleSpecialtyChange(e.target.value)}
                 >
                   <option value="all">{t.allSpecialties}</option>
                   {SPECIALTY_OPTIONS.map((option) => (

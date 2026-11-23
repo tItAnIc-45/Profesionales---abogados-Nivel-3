@@ -26,10 +26,10 @@ const slides = [
       zh: '多领域律师事务所，专精公司法、民事、刑事与监管法律。',
     },
     primary: {
-      es: 'Agendar Cita Presencial',
-      en: 'Schedule In-Person Meeting',
-      fr: 'Prendre rendez-vous',
-      zh: '预约面谈',
+      es: 'Solicitar consulta',
+      en: 'Request a consultation',
+      fr: 'Demander une consultation',
+      zh: '预约咨询',
     },
     secondary: {
       es: 'Conocer La Firma',
@@ -60,10 +60,10 @@ const slides = [
       zh: '在合同、并购、合规与公司治理方面提供战略支持。',
     },
     primary: {
-      es: 'Agendar Cita Presencial',
-      en: 'Schedule In-Person Meeting',
-      fr: 'Prendre rendez-vous',
-      zh: '预约面谈',
+      es: 'Solicitar consulta',
+      en: 'Request a consultation',
+      fr: 'Demander une consultation',
+      zh: '预约咨询',
     },
     secondary: {
       es: 'Áreas de Práctica',
@@ -94,10 +94,10 @@ const slides = [
       zh: '量身定制的诉讼策略，严守保密，并提供扎实的技术支持。',
     },
     primary: {
-      es: 'Consulta Legal',
-      en: 'Legal Consultation',
-      fr: 'Consultation juridique',
-      zh: '法律咨询',
+      es: 'Solicitar consulta',
+      en: 'Request a consultation',
+      fr: 'Demander une consultation',
+      zh: '预约咨询',
     },
     secondary: {
       es: 'Nuestro Equipo',

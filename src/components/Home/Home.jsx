@@ -49,7 +49,7 @@ const ui = {
     'Consultez nos services, nos honoraires et demandez un devis sans engagement.',
     '查看服务、收费区间，并申请无义务报价。',
   ),
-  feesCta: T('Ver honorarios', 'View fees', 'Voir les honoraires', '查看收费'),
+  feesCta: T('Servicios y honorarios', 'Services & fees', 'Services et honoraires', '服务与收费'),
   fee1: T('Consulta legal', 'Legal consultation', 'Consultation juridique', '法律咨询'),
   fee1Price: T('S/ 80 – S/ 150', 'S/ 80 – S/ 150', 'S/ 80 – S/ 150', 'S/ 80 – S/ 150'),
   fee2: T('Elaboración de documentos', 'Document drafting', 'Rédaction de documents', '文件起草'),
@@ -77,7 +77,7 @@ function FirmPreview() {
 
         <div className="home-firm-stats">
           <div className="home-stat">
-            <strong>15+</strong>
+            <strong>+20</strong>
             <span>{pick(ui.firmStat1, lang)}</span>
           </div>
           <div className="home-stat">
@@ -107,13 +107,21 @@ function AreasPreview() {
         </div>
 
         <div className="home-areas-grid">
-          {PRACTICE_AREAS.map((area) => (
+          {PRACTICE_AREAS.map((area, index) => (
             <Link key={area.slug} to={`/areas/${area.slug}`} className="home-area-card">
+              <span className="home-area-index" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
               <span className="home-area-icon">
                 <i className={area.icon} aria-hidden="true" />
               </span>
               <h3>{pick(area.title, lang)}</h3>
               <p>{pick(area.short, lang)}</p>
+              <ul className="home-area-tags">
+                {area.services.slice(0, 3).map((service) => (
+                  <li key={pick(service.title, 'es')}>{pick(service.title, lang)}</li>
+                ))}
+              </ul>
               <span className="home-area-link">
                 {pick(ui.areaCta, lang)}
                 <i className="fa-solid fa-arrow-right" aria-hidden="true" />
