@@ -267,6 +267,18 @@
   list-style: none;
 }
 
+.abogado-summary {
+  display: -webkit-box;
+  margin: 0 0 1.15rem;
+  overflow: hidden;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.65;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
 .specialty-pill {
   padding: 0.28rem 0.6rem;
   background: color-mix(in srgb, var(--accent-gold) 9%, transparent);
@@ -391,7 +403,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 680px;
+  max-width: 760px;
   max-height: 86vh;
   background:
     linear-gradient(180deg, color-mix(in srgb, var(--accent-gold) 6%, transparent), transparent 32%),
@@ -481,6 +493,25 @@
   overflow-y: auto;
 }
 
+.bio-lead {
+  margin-bottom: 1.5rem;
+  padding: 0.95rem 1.1rem;
+  background: color-mix(in srgb, var(--accent-gold) 7%, transparent);
+  border-left: 3px solid var(--accent-gold);
+  border-radius: 0 var(--r-sm) var(--r-sm) 0;
+  color: var(--text-light);
+  font-size: 0.93rem;
+  font-style: italic;
+  line-height: 1.75;
+}
+
+.bio-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.4rem 2rem;
+  align-items: start;
+}
+
 .bio-block {
   margin-bottom: 1.35rem;
 }
@@ -509,9 +540,18 @@
 }
 
 .modal-custom-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.75rem;
   padding: 1rem 2rem 1.3rem;
   border-top: 1px solid var(--border-soft);
   text-align: right;
+}
+
+.btn-modal-consulta {
+  padding: 0.7rem 1.5rem;
+  font-size: 0.8rem;
 }
 
 .btn-modal-cerrar {
@@ -549,5 +589,21 @@
   .modal-custom-footer {
     padding-right: 1.25rem;
     padding-left: 1.25rem;
+  }
+
+  .bio-grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .modal-custom-footer {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+
+  .modal-custom-footer .btn-modal-consulta,
+  .modal-custom-footer .btn-modal-cerrar {
+    width: 100%;
+    text-align: center;
   }
 }

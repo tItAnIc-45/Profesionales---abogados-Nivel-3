@@ -4,34 +4,42 @@
  */
 const T = (es, en, fr, zh) => ({ es, en, fr, zh });
 
+// Resuelve valores anidados traducibles (por ejemplo, una membresía compartida)
+// para que las listas solo contengan cadenas y puedan renderizarse en React.
+const localize = (value, lang) => {
+  if (Array.isArray(value)) return value.map((item) => localize(item, lang));
+  if (value && typeof value === 'object') return value[lang] ?? value.es;
+  return value;
+};
+
 const bio = (formacion, experiencia, membresias, docencia, idiomas) => ({
   es: {
-    formacion: formacion.es,
-    experiencia: experiencia.es,
-    membresias: membresias.es,
-    docencia: docencia.es,
-    idiomas: idiomas.es,
+    formacion: localize(formacion.es, 'es'),
+    experiencia: localize(experiencia.es, 'es'),
+    membresias: localize(membresias.es, 'es'),
+    docencia: localize(docencia.es, 'es'),
+    idiomas: localize(idiomas.es, 'es'),
   },
   en: {
-    formacion: formacion.en,
-    experiencia: experiencia.en,
-    membresias: membresias.en,
-    docencia: docencia.en,
-    idiomas: idiomas.en,
+    formacion: localize(formacion.en, 'en'),
+    experiencia: localize(experiencia.en, 'en'),
+    membresias: localize(membresias.en, 'en'),
+    docencia: localize(docencia.en, 'en'),
+    idiomas: localize(idiomas.en, 'en'),
   },
   fr: {
-    formacion: formacion.fr,
-    experiencia: experiencia.fr,
-    membresias: membresias.fr,
-    docencia: docencia.fr,
-    idiomas: idiomas.fr,
+    formacion: localize(formacion.fr, 'fr'),
+    experiencia: localize(experiencia.fr, 'fr'),
+    membresias: localize(membresias.fr, 'fr'),
+    docencia: localize(docencia.fr, 'fr'),
+    idiomas: localize(idiomas.fr, 'fr'),
   },
   zh: {
-    formacion: formacion.zh,
-    experiencia: experiencia.zh,
-    membresias: membresias.zh,
-    docencia: docencia.zh,
-    idiomas: idiomas.zh,
+    formacion: localize(formacion.zh, 'zh'),
+    experiencia: localize(experiencia.zh, 'zh'),
+    membresias: localize(membresias.zh, 'zh'),
+    docencia: localize(docencia.zh, 'zh'),
+    idiomas: localize(idiomas.zh, 'zh'),
   },
 });
 

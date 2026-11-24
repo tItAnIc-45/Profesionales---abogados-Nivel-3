@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
 import { EXTRA_LAWYERS } from '../../data/lawyersExtra';
+import { LAWYER_PROFILES } from '../../data/lawyerProfiles';
 import { PRACTICE_AREAS, SPECIALTY_OPTIONS } from '../../data/practiceAreas';
 import './Equipo.css';
 
@@ -76,6 +77,8 @@ const ui = {
   },
   docencia: { es: 'Docencia:', en: 'Teaching:', fr: 'Enseignement :', zh: '教学经历：' },
   idiomas: { es: 'Idiomas:', en: 'Languages:', fr: 'Langues :', zh: '语言：' },
+  perfil: { es: 'Perfil profesional:', en: 'Professional profile:', fr: 'Profil professionnel :', zh: '专业简介：' },
+  enfoque: { es: 'Enfoque de práctica:', en: 'Practice focus:', fr: 'Axes de pratique :', zh: '业务重点：' },
   noResults: {
     es: 'No se encontraron resultados para la búsqueda.',
     en: 'No results found for the search.',
@@ -87,6 +90,12 @@ const ui = {
     en: 'Send email',
     fr: 'Envoyer un e-mail',
     zh: '发送邮件',
+  },
+  requestConsultation: {
+    es: 'Solicitar consulta',
+    en: 'Request a consultation',
+    fr: 'Demander une consultation',
+    zh: '预约咨询',
   },
   filterLabel: {
     es: 'Filtrar por especialidad',
@@ -484,7 +493,10 @@ export const TEAM = [
     specialties: EXISTING_SPECIALTIES[abogado.id] ?? [],
   })),
   ...EXTRA_LAWYERS,
-];
+].map((abogado) => ({
+  ...abogado,
+  ...(LAWYER_PROFILES[abogado.id] ?? {}),
+}));
 
 const specialtyTitleBySlug = (slug) => {
   const area = PRACTICE_AREAS.find((item) => item.slug === slug);
@@ -537,6 +549,9 @@ export default function Equipo() {
     membresias: pick(ui.membresias, lang),
     docencia: pick(ui.docencia, lang),
     idiomas: pick(ui.idiomas, lang),
+    perfil: pick(ui.perfil, lang),
+    enfoque: pick(ui.enfoque, lang),
+    requestConsultation: pick(ui.requestConsultation, lang),
     noResults: pick(ui.noResults, lang),
     sendEmail: pick(ui.sendEmail, lang),
     filterLabel: pick(ui.filterLabel, lang),
@@ -584,6 +599,8 @@ export default function Equipo() {
         ...selectedAbogado,
         ...(selectedAbogado.bio[lang] ?? selectedAbogado.bio.es),
         cargo: pick(selectedAbogado.cargo, lang),
+        resumen: selectedAbogado.resumen ? pick(selectedAbogado.resumen, lang) : '',
+        enfoque: selectedAbogado.enfoque ? pick(selectedAbogado.enfoque, lang) : [],
       }
     : null;
 
@@ -684,6 +701,9 @@ export default function Equipo() {
                     ) : null;
                   })}
                 </ul>
+                {abogado.resumen && (
+                  <p className="abogado-summary">{pick(abogado.resumen, lang)}</p>
+                )}
                 <div className="card-social-actions">
                   <button
                     type="button"
@@ -745,82 +765,105 @@ export default function Equipo() {
             </div>
 
             <div className="modal-custom-body">
-              {bio.specialties && bio.specialties.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.specialties}</h3>
-                  <ul className="modal-specialty-list">
-                    {bio.specialties.map((slug) => {
-                      const title = specialtyTitleBySlug(slug);
-                      return title ? <li key={slug}>{pick(title, lang)}</li> : null;
-                    })}
-                  </ul>
-                </div>
-              )}
+              {bio.resumen && <p className="bio-lead">{bio.resumen}</p>}
 
-              {bio.formacion && bio.formacion.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.formacion}</h3>
-                  {bio.formacion.map((item, idx) => (
-                    <p key={idx}>{item}</p>
-                  ))}
-                </div>
-              )}
+              <div className="bio-grid">
+                {bio.specialties && bio.specialties.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.specialties}</h3>
+                    <ul className="modal-specialty-list">
+                      {bio.specialties.map((slug) => {
+                        const title = specialtyTitleBySlug(slug);
+                        return title ? <li key={slug}>{pick(title, lang)}</li> : null;
+                      })}
+                    </ul>
+                  </div>
+                )}
 
-              {bio.experiencia && bio.experiencia.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.experiencia}</h3>
-                  {bio.experiencia.map((item, idx) => (
-                    <p key={idx}>{item}</p>
-                  ))}
-                </div>
-              )}
+                {bio.enfoque && bio.enfoque.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.enfoque}</h3>
+                    <ul>
+                      {bio.enfoque.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-              {bio.publicaciones && bio.publicaciones.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.publicaciones}</h3>
-                  <ul>
-                    {bio.publicaciones.map((item, idx) => (
-                      <li key={idx}>{item}</li>
+                {bio.formacion && bio.formacion.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.formacion}</h3>
+                    {bio.formacion.map((item, idx) => (
+                      <p key={idx}>{item}</p>
                     ))}
-                  </ul>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {bio.membresias && bio.membresias.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.membresias}</h3>
-                  <ul>
-                    {bio.membresias.map((item, idx) => (
-                      <li key={idx}>{item}</li>
+                {bio.experiencia && bio.experiencia.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.experiencia}</h3>
+                    {bio.experiencia.map((item, idx) => (
+                      <p key={idx}>{item}</p>
                     ))}
-                  </ul>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {bio.docencia && bio.docencia.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.docencia}</h3>
-                  <ul>
-                    {bio.docencia.map((item, idx) => (
-                      <li key={idx}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                {bio.publicaciones && bio.publicaciones.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.publicaciones}</h3>
+                    <ul>
+                      {bio.publicaciones.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-              {bio.idiomas && bio.idiomas.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.idiomas}</h3>
-                  <ul>
-                    {bio.idiomas.map((item, idx) => (
-                      <li key={idx}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                {bio.membresias && bio.membresias.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.membresias}</h3>
+                    <ul>
+                      {bio.membresias.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {bio.docencia && bio.docencia.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.docencia}</h3>
+                    <ul>
+                      {bio.docencia.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {bio.idiomas && bio.idiomas.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.idiomas}</h3>
+                    <ul>
+                      {bio.idiomas.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="modal-custom-footer">
+              <Link
+                className="btn-gold btn-modal-consulta"
+                to="/contacto"
+                onClick={() => setSelectedAbogado(null)}
+              >
+                {t.requestConsultation}
+                <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+              </Link>
               <button className="btn-modal-cerrar" onClick={() => setSelectedAbogado(null)}>
                 {t.close}
               </button>
