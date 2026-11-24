@@ -9,7 +9,7 @@
   height: 48px;
   border: 1px solid var(--border-glow);
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold) 55%, var(--accent-gold-dark));
+  background: linear-gradient(135deg, var(--gold-fill-light), var(--gold-fill) 55%, var(--gold-fill-dark));
   color: #0a0f18;
   font-size: 1rem;
   cursor: pointer;

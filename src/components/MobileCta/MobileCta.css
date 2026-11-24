@@ -73,23 +73,12 @@
   }
 
   .mobile-cta-quote {
-    background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold) 55%, var(--accent-gold-dark));
+    background: linear-gradient(135deg, var(--gold-fill-light), var(--gold-fill) 55%, var(--gold-fill-dark));
     color: #0a0f18;
   }
 
   .mobile-cta-quote:active,
   .mobile-cta-quote:hover {
-    background: linear-gradient(135deg, #f6dc8c, #d4af37 55%, #a8842a);
-  }
-
-  /* En tema claro el oro de relleno se mantiene brillante para conservar
-     el contraste del texto oscuro sobre el degradado. */
-  [data-theme='light'] .mobile-cta-quote {
-    background: linear-gradient(135deg, #f6dc8c, #d4af37 55%, #a8842a);
-  }
-
-  [data-theme='light'] .mobile-cta-quote:active,
-  [data-theme='light'] .mobile-cta-quote:hover {
-    background: linear-gradient(135deg, #fce7a6, #e0bc44 55%, #b8962f);
+    background: linear-gradient(135deg, var(--gold-fill-hover-light), var(--gold-fill) 55%, var(--gold-fill-dark));
   }
 }

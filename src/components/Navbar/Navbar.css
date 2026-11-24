@@ -249,8 +249,8 @@
 }
 
 .btn-theme:hover {
-  background: var(--accent-gold);
-  border-color: var(--accent-gold);
+  background: var(--gold-fill);
+  border-color: var(--gold-fill);
   color: #0a0f18;
   transform: translateY(-1px);
 }
@@ -502,7 +502,7 @@ html.rm-open .rm-bar:nth-child(3) {
     padding: 0.95rem 1.4rem;
     border: 0;
     color: #0a0f18;
-    background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold) 52%, var(--accent-gold-dark));
+    background: linear-gradient(135deg, var(--gold-fill-light), var(--gold-fill) 52%, var(--gold-fill-dark));
   }
 
   .rm-backdrop {

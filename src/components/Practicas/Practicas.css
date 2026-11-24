@@ -279,7 +279,7 @@
   padding: 0.7rem 1.6rem;
   border: 0;
   border-radius: var(--r-pill);
-  background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold) 55%, var(--accent-gold-dark));
+  background: linear-gradient(135deg, var(--gold-fill-light), var(--gold-fill) 55%, var(--gold-fill-dark));
   color: #0a0f18;
   font-weight: 800;
   cursor: pointer;

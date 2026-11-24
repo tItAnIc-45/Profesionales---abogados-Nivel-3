@@ -133,7 +133,8 @@
 
 .hero-actions .btn-outline:hover {
   color: #0a0f18;
-  background: var(--accent-gold);
+  background: var(--gold-fill);
+  border-color: var(--gold-fill);
 }
 
 .hero-points {
