@@ -100,6 +100,49 @@ const ui = {
     'Espagnol, anglais, français et chinois.',
     '西班牙语、英语、法语和中文。',
   ),
+  processTag: T('CÓMO TRABAJAMOS', 'HOW WE WORK', 'NOTRE MÉTHODE', '我们的工作方式'),
+  processTitle: T(
+    'Un proceso claro desde la primera conversación',
+    'A clear process from the first conversation',
+    'Un processus clair dès le premier échange',
+    '从首次沟通开始，流程清晰透明',
+  ),
+  processDesc: T(
+    'Cuatro pasos para que sepas qué esperar, quién te atiende y cuánto costará antes de tomar una decisión.',
+    'Four steps so you know what to expect, who will assist you and what it will cost before you decide.',
+    'Quatre étapes pour savoir à quoi vous attendre, qui vous accompagne et combien cela coûtera avant de décider.',
+    '四个步骤，让您在决定前了解预期、服务团队与费用。',
+  ),
+  process1Title: T('Primera conversación', 'First conversation', 'Premier échange', '首次沟通'),
+  process1Desc: T(
+    'Escuchamos tu situación, identificamos los puntos clave y te explicamos si podemos ayudarte.',
+    'We listen to your situation, identify the key points and explain whether we can help.',
+    'Nous écoutons votre situation, identifions les points clés et vous expliquons si nous pouvons vous aider.',
+    '我们倾听您的情况，梳理关键问题，并说明我们是否可以提供帮助。',
+  ),
+  process2Title: T('Análisis y estrategia', 'Analysis and strategy', 'Analyse et stratégie', '分析与策略'),
+  process2Desc: T(
+    'Revisamos la documentación y evaluamos alternativas, riesgos y plazos con claridad.',
+    'We review the documentation and assess alternatives, risks and timelines clearly.',
+    'Nous examinons les documents et évaluons clairement les options, les risques et les délais.',
+    '我们审阅相关文件，清晰评估可选方案、风险与时限。',
+  ),
+  process3Title: T('Propuesta y honorarios', 'Proposal and fees', 'Proposition et honoraires', '方案与费用'),
+  process3Desc: T(
+    'Recibes por escrito el alcance del servicio, el equipo asignado y los honorarios antes de decidir.',
+    'You receive the scope of work, the assigned team and the fees in writing before you decide.',
+    'Vous recevez par écrit le périmètre de la mission, l’équipe assignée et les honoraires avant de décider.',
+    '在您决定前，我们会以书面形式提供服务范围、承办团队和费用。',
+  ),
+  process4Title: T('Acompañamiento', 'Ongoing support', 'Accompagnement', '全程陪伴'),
+  process4Desc: T(
+    'Ejecutamos la estrategia y te mantenemos informado en cada etapa del proceso.',
+    'We execute the strategy and keep you informed at every stage of the process.',
+    'Nous mettons la stratégie en œuvre et vous informons à chaque étape de la procédure.',
+    '我们执行既定策略，并在每个阶段向您通报进展。',
+  ),
+  processCta: T('Solicitar consulta', 'Request a consultation', 'Demander une consultation', '预约咨询'),
+  processFeesCta: T('Ver honorarios', 'View fees', 'Voir les honoraires', '查看收费'),
   faqTag: T('PREGUNTAS FRECUENTES', 'FREQUENTLY ASKED QUESTIONS', 'QUESTIONS FRÉQUENTES', '常见问题'),
   faqTitle: T(
     'Respuestas antes del primer paso',
@@ -185,6 +228,73 @@ function AreasPreview() {
               </span>
             </Link>
           ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function Process() {
+  const lang = useLanguage();
+  const steps = [
+    {
+      icon: 'fa-solid fa-comments',
+      title: pick(ui.process1Title, lang),
+      desc: pick(ui.process1Desc, lang),
+    },
+    {
+      icon: 'fa-solid fa-magnifying-glass-chart',
+      title: pick(ui.process2Title, lang),
+      desc: pick(ui.process2Desc, lang),
+    },
+    {
+      icon: 'fa-solid fa-file-signature',
+      title: pick(ui.process3Title, lang),
+      desc: pick(ui.process3Desc, lang),
+    },
+    {
+      icon: 'fa-solid fa-handshake',
+      title: pick(ui.process4Title, lang),
+      desc: pick(ui.process4Desc, lang),
+    },
+  ];
+
+  return (
+    <section className="home-process" aria-labelledby="home-process-title">
+      <div className="container">
+        <div className="section-header">
+          <span className="section-tag">{pick(ui.processTag, lang)}</span>
+          <h2 className="section-title" id="home-process-title">
+            {pick(ui.processTitle, lang)}
+          </h2>
+          <p className="section-desc">{pick(ui.processDesc, lang)}</p>
+        </div>
+
+        <ol className="home-process-list">
+          {steps.map((step, index) => (
+            <li className="home-process-step" key={step.title}>
+              <div className="home-process-head">
+                <span className="home-process-icon">
+                  <i className={step.icon} aria-hidden="true" />
+                </span>
+                <span className="home-process-num" aria-hidden="true">
+                  {String(index + 1).padStart(2, '0')}
+                </span>
+              </div>
+              <h3>{step.title}</h3>
+              <p>{step.desc}</p>
+            </li>
+          ))}
+        </ol>
+
+        <div className="home-process-actions">
+          <Link className="btn-gold" to="/contacto">
+            {pick(ui.processCta, lang)}
+            <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+          </Link>
+          <Link className="btn-outline" to="/cotizador">
+            {pick(ui.processFeesCta, lang)}
+          </Link>
         </div>
       </div>
     </section>
@@ -376,6 +486,7 @@ export default function Home() {
       <TrustStrip />
       <FirmPreview />
       <AreasPreview />
+      <Process />
       <TeamPreview />
       <FeesPreview />
       <Faq />
