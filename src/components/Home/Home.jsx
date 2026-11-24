@@ -1,9 +1,11 @@
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Banner from '../Banner/Banner';
 import Contacto from '../Contacto/Contacto';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
 import { PRACTICE_AREAS } from '../../data/practiceAreas';
+import { HOME_FAQ } from '../../data/faq';
 import { TEAM, getInitials } from '../Equipo/Equipo';
 import './Home.css';
 
@@ -57,6 +59,61 @@ const ui = {
   fee3: T('Procesos judiciales', 'Court proceedings', 'Procédures judiciaires', '司法程序'),
   fee3Price: T('Cotización personalizada', 'Custom quote', 'Devis personnalisé', '个性化报价'),
   finalTitle: T('Cuéntanos tu caso', 'Tell us about your case', 'Présentez-nous votre dossier', '告诉我们您的情况'),
+  trustTag: T('NUESTRO COMPROMISO', 'OUR COMMITMENT', 'NOTRE ENGAGEMENT', '我们的承诺'),
+  trustTitle: T(
+    'Una atención pensada para generar confianza',
+    'An experience built to earn trust',
+    'Une expérience conçue pour inspirer confiance',
+    '以信任为核心的服务体验',
+  ),
+  trustDesc: T(
+    'Sin promesas vacías: claridad sobre el proceso, los plazos y los honorarios desde el primer contacto.',
+    'No empty promises: clarity about the process, timelines and fees from the first contact.',
+    'Sans promesses creuses : clarté sur la procédure, les délais et les honoraires dès le premier échange.',
+    '不作空泛承诺：从首次沟通起，清晰说明流程、时限与费用。',
+  ),
+  trust1Title: T('Confidencialidad', 'Confidentiality', 'Confidentialité', '保密性'),
+  trust1Desc: T(
+    'Tu consulta y tus documentos se tratan con reserva.',
+    'Your inquiry and documents are handled with discretion.',
+    'Votre demande et vos documents sont traités avec discrétion.',
+    '您的咨询与文件将被谨慎保密处理。',
+  ),
+  trust2Title: T('Honorarios claros', 'Clear fees', 'Honoraires clairs', '费用透明'),
+  trust2Desc: T(
+    'Rangos publicados y cotización por escrito antes de iniciar.',
+    'Published ranges and a written quote before we begin.',
+    'Des fourchettes publiées et un devis écrit avant de commencer.',
+    '公开收费区间，开始前提供书面报价。',
+  ),
+  trust3Title: T('Respuesta ágil', 'Prompt response', 'Réponse rapide', '及时回复'),
+  trust3Desc: T(
+    'Respondemos en menos de 24 horas hábiles.',
+    'We reply within 24 business hours.',
+    'Nous répondons sous 24 heures ouvrables.',
+    '我们在 24 个工作小时内回复。',
+  ),
+  trust4Title: T('Cuatro idiomas', 'Four languages', 'Quatre langues', '四种语言'),
+  trust4Desc: T(
+    'Español, inglés, francés y chino.',
+    'Spanish, English, French and Chinese.',
+    'Espagnol, anglais, français et chinois.',
+    '西班牙语、英语、法语和中文。',
+  ),
+  faqTag: T('PREGUNTAS FRECUENTES', 'FREQUENTLY ASKED QUESTIONS', 'QUESTIONS FRÉQUENTES', '常见问题'),
+  faqTitle: T(
+    'Respuestas antes del primer paso',
+    'Answers before the first step',
+    'Des réponses avant le premier pas',
+    '迈出第一步前的解答',
+  ),
+  faqDesc: T(
+    'Si tu pregunta no aparece aquí, escríbenos y la respondemos en menos de 24 horas hábiles.',
+    'If your question is not here, write to us and we will answer within 24 business hours.',
+    'Si votre question n’apparaît pas ici, écrivez-nous : nous répondrons sous 24 heures ouvrables.',
+    '如果这里没有您的问题，请给我们留言，我们将在 24 个工作小时内回复。',
+  ),
+  faqCta: T('Hablar con un abogado', 'Talk to a lawyer', 'Parler à un avocat', '联系律师'),
 };
 
 function FirmPreview() {
@@ -209,14 +266,119 @@ function FeesPreview() {
   );
 }
 
+function TrustStrip() {
+  const lang = useLanguage();
+  const items = [
+    {
+      icon: 'fa-solid fa-user-shield',
+      title: pick(ui.trust1Title, lang),
+      desc: pick(ui.trust1Desc, lang),
+    },
+    {
+      icon: 'fa-solid fa-file-invoice-dollar',
+      title: pick(ui.trust2Title, lang),
+      desc: pick(ui.trust2Desc, lang),
+    },
+    {
+      icon: 'fa-solid fa-clock',
+      title: pick(ui.trust3Title, lang),
+      desc: pick(ui.trust3Desc, lang),
+    },
+    {
+      icon: 'fa-solid fa-language',
+      title: pick(ui.trust4Title, lang),
+      desc: pick(ui.trust4Desc, lang),
+    },
+  ];
+
+  return (
+    <section className="home-trust" aria-labelledby="home-trust-title">
+      <div className="container home-trust-grid">
+        <div className="home-trust-intro">
+          <span className="section-tag">{pick(ui.trustTag, lang)}</span>
+          <h2 id="home-trust-title">{pick(ui.trustTitle, lang)}</h2>
+          <p>{pick(ui.trustDesc, lang)}</p>
+        </div>
+
+        <ul className="home-trust-list">
+          {items.map((item) => (
+            <li className="home-trust-item" key={item.title}>
+              <i className={item.icon} aria-hidden="true" />
+              <div>
+                <h3>{item.title}</h3>
+                <p>{item.desc}</p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
+function Faq() {
+  const lang = useLanguage();
+
+  // Datos estructurados para buscadores. El contenido visible y el schema
+  // comparten la misma fuente en español.
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.type = 'application/ld+json';
+    script.id = 'home-faq-schema';
+    script.textContent = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: HOME_FAQ.map((item) => ({
+        '@type': 'Question',
+        name: item.question.es,
+        acceptedAnswer: { '@type': 'Answer', text: item.answer.es },
+      })),
+    });
+    document.head.appendChild(script);
+    return () => script.remove();
+  }, []);
+
+  return (
+    <section className="home-faq" aria-labelledby="home-faq-title">
+      <div className="container home-faq-grid">
+        <div className="home-faq-head">
+          <span className="section-tag">{pick(ui.faqTag, lang)}</span>
+          <h2 className="section-title" id="home-faq-title">
+            {pick(ui.faqTitle, lang)}
+          </h2>
+          <p>{pick(ui.faqDesc, lang)}</p>
+          <Link className="home-text-link" to="/contacto">
+            {pick(ui.faqCta, lang)}
+            <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+          </Link>
+        </div>
+
+        <div className="home-faq-list">
+          {HOME_FAQ.map((item) => (
+            <details className="home-faq-item" key={item.id}>
+              <summary>
+                <span>{pick(item.question, lang)}</span>
+                <i className="fa-solid fa-plus" aria-hidden="true" />
+              </summary>
+              <p>{pick(item.answer, lang)}</p>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <div className="home-page">
       <Banner />
+      <TrustStrip />
       <FirmPreview />
       <AreasPreview />
       <TeamPreview />
       <FeesPreview />
+      <Faq />
       <Contacto />
     </div>
   );

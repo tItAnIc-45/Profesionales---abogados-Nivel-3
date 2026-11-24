@@ -6,6 +6,80 @@
   background: var(--bg);
 }
 
+/* Compromiso ------------------------------------------------------------- */
+
+.home-trust {
+  padding-block: clamp(2.4rem, 5vw, 3.6rem);
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.home-trust-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(1.8rem, 4vw, 3.5rem);
+  align-items: center;
+}
+
+.home-trust-intro h2 {
+  margin: 0.55rem 0 0.75rem;
+  font-size: clamp(1.5rem, 2.8vw, 2.1rem);
+  line-height: 1.18;
+}
+
+.home-trust-intro p {
+  max-width: 46ch;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.8;
+}
+
+.home-trust-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.home-trust-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.85rem;
+  padding: 1rem 1.1rem;
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-md);
+  transition: border-color var(--t), transform var(--t);
+}
+
+.home-trust-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-glow);
+}
+
+.home-trust-item > i {
+  display: grid;
+  place-items: center;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  background: color-mix(in srgb, var(--accent-gold) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 25%, transparent);
+  border-radius: 10px;
+  color: var(--accent-gold);
+  font-size: 0.9rem;
+}
+
+.home-trust-item h3 {
+  margin-bottom: 0.25rem;
+  font-size: 0.9rem;
+}
+
+.home-trust-item p {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
 .home-firm {
   padding-block: var(--space-section);
   border-bottom: 1px solid var(--border-color);
@@ -103,21 +177,29 @@
 
 .home-area-index {
   position: absolute;
-  top: 0.7rem;
-  right: 1.1rem;
+  top: 1.05rem;
+  right: 1.05rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.35rem;
+  padding: 0.26rem 0.5rem;
+  background: color-mix(in srgb, var(--accent-gold) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 28%, transparent);
+  border-radius: var(--r-pill);
   color: var(--accent-gold);
-  font-family: var(--font-display);
-  font-size: 3.1rem;
-  font-weight: 700;
-  line-height: 1;
-  opacity: 0.12;
+  font-family: var(--font-body);
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  line-height: 1.25;
   pointer-events: none;
-  transition: opacity var(--t), transform var(--t);
+  transition: background-color var(--t), border-color var(--t);
 }
 
 .home-area-card:hover .home-area-index {
-  opacity: 0.24;
-  transform: translateY(-3px);
+  background: color-mix(in srgb, var(--accent-gold) 16%, transparent);
+  border-color: var(--border-glow);
 }
 
 .home-area-card:hover {
@@ -369,11 +451,94 @@
   font-size: 0.94rem;
 }
 
+/* Preguntas frecuentes --------------------------------------------------- */
+
+.home-faq {
+  padding-block: var(--space-section);
+}
+
+.home-faq-grid {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: start;
+}
+
+.home-faq-head .section-title {
+  margin: 0.5rem 0 0.85rem;
+  text-align: left;
+}
+
+.home-faq-head > p {
+  max-width: 42ch;
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.8;
+}
+
+.home-faq-head .home-text-link {
+  margin-top: 1.3rem;
+}
+
+.home-faq-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.home-faq-item {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--r-md);
+  transition: border-color var(--t);
+}
+
+.home-faq-item[open] {
+  border-color: var(--border-glow);
+}
+
+.home-faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.05rem 1.2rem;
+  color: var(--text-light);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.5;
+  cursor: pointer;
+  list-style: none;
+}
+
+.home-faq-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.home-faq-item summary i {
+  flex: 0 0 auto;
+  color: var(--accent-gold);
+  font-size: 0.78rem;
+  transition: transform var(--t);
+}
+
+.home-faq-item[open] summary i {
+  transform: rotate(45deg);
+}
+
+.home-faq-item p {
+  padding: 0 1.2rem 1.15rem;
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.75;
+}
+
 /* Responsive ------------------------------------------------------------- */
 
 @media (max-width: 900px) {
   .home-firm-grid,
-  .home-fees-inner {
+  .home-fees-inner,
+  .home-trust-grid,
+  .home-faq-grid {
     grid-template-columns: 1fr;
   }
 
@@ -393,5 +558,9 @@
 
   .home-stat strong {
     font-size: 1.6rem;
+  }
+
+  .home-trust-list {
+    grid-template-columns: 1fr;
   }
 }

@@ -147,8 +147,8 @@ main > div > section:first-child:not(.hero) {
     padding: 1.4rem;
   }
 
-  .hero-trust {
-    gap: 1.2rem 2rem;
+  .hero-points {
+    gap: 0.55rem 1.2rem;
   }
 }
 
@@ -240,10 +240,6 @@ main > div > section:first-child:not(.hero) {
 
   .section-title {
     font-size: 1.55rem;
-  }
-
-  .hero-trust-item strong {
-    font-size: 1.2rem;
   }
 }
 
