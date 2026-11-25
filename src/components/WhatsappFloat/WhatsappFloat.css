@@ -53,7 +53,8 @@
   }
 }
 
-@media (max-width: 768px) {
+/* En ≤960px la barra inferior ya ofrece WhatsApp, llamada y cotización. */
+@media (max-width: 960px) {
   .whatsapp-float {
     display: none;
   }

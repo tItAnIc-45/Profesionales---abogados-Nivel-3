@@ -244,6 +244,46 @@ main > div > section:first-child:not(.hero) {
 }
 
 /* --------------------------------------------------------------------------
+   Interacción táctil — áreas de toque cómodas
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 960px) {
+  /* 16px evita el zoom automático de iOS al enfocar un campo. */
+  .form-control {
+    font-size: 1rem;
+  }
+
+  .form-check input[type='checkbox'] {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: 0.1rem;
+  }
+
+  .form-check label {
+    padding-block: 0.18rem;
+  }
+
+  .form-check .privacy-link {
+    padding-block: 0.22rem;
+  }
+
+  .area-breadcrumb a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+  }
+
+  .home-text-link,
+  .service-link,
+  .area-back-link,
+  .area-quote-link,
+  .area-phone,
+  .home-lawyer > a {
+    min-height: 44px;
+  }
+}
+
+/* --------------------------------------------------------------------------
    Accesibilidad
    -------------------------------------------------------------------------- */
 

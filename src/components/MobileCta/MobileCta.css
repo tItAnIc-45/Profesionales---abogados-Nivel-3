@@ -6,7 +6,9 @@
   display: none;
 }
 
-@media (max-width: 768px) {
+/* La barra acompaña al menú lateral (≤960px) para que los teléfonos en
+   horizontal y las tablets mantengan las acciones rápidas siempre a mano. */
+@media (max-width: 960px) {
   body {
     padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
   }
