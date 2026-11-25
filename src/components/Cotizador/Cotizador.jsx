@@ -341,6 +341,18 @@ const copy = {
       fr: 'Nous avons ouvert votre client de messagerie. S’il ne s’ouvre pas, écrivez-nous à contacto@tuplusabogados.com.pe.',
       zh: '已打开您的邮件客户端。如未打开，请发送邮件至 contacto@tuplusabogados.com.pe。',
     },
+    message: {
+      es: 'Describe brevemente tu consulta; no se aceptan solo espacios en blanco.',
+      en: 'Briefly describe your inquiry; blank spaces alone are not accepted.',
+      fr: 'Décrivez brièvement votre demande ; les espaces vides ne sont pas acceptés.',
+      zh: '请简要描述您的咨询；不接受仅含空格的内容。',
+    },
+    contact: {
+      es: 'Indícanos un correo o teléfono de contacto; no se aceptan solo espacios en blanco.',
+      en: 'Please provide an email or phone number; blank spaces alone are not accepted.',
+      fr: 'Indiquez un e-mail ou un téléphone ; les espaces vides ne sont pas acceptés.',
+      zh: '请提供联系邮箱或电话；不接受仅含空格的内容。',
+    },
   },
 };
 
@@ -392,6 +404,16 @@ export default function Cotizador() {
       return;
     }
 
+    if (!message.trim()) {
+      setStatus('message');
+      return;
+    }
+
+    if (!contact.trim()) {
+      setStatus('contact');
+      return;
+    }
+
     if (!consent) {
       setStatus('consent');
       return;
@@ -416,6 +438,8 @@ export default function Cotizador() {
 
     const formData = new FormData(formRef.current);
     formData.set('servicio', selectedServiceLabel);
+    formData.set('mensaje', message.trim());
+    formData.set('contacto', contact.trim());
 
     try {
       const response = await fetch(formspreeUrl, {
@@ -447,7 +471,7 @@ export default function Cotizador() {
   const statusClass =
     status === 'sent'
       ? 'sp-quote-status--ok'
-      : status === 'error' || status === 'consent'
+      : status === 'error' || status === 'consent' || status === 'message' || status === 'contact'
         ? 'sp-quote-status--error'
         : 'sp-quote-status--info';
 

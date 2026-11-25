@@ -1,35 +1,155 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
+import { PRACTICE_AREAS } from '../../data/practiceAreas';
 import PrivacyModal from '../Privacy/PrivacyModal';
 import './Contacto.css';
 
 const formspreeUrl = import.meta.env.VITE_FORMSPREE_URL || import.meta.env.VITE_FORMSPREE_ENDPOINT || '';
+const hasFormspree = Boolean(formspreeUrl) && !formspreeUrl.includes('your-form-id');
+
+const T = (es, en, fr, zh) => ({ es, en, fr, zh });
 
 const privacyCopy = {
-  link: {
-    es: 'Ver política',
-    en: 'View policy',
-    fr: 'Voir la politique',
-    zh: '查看政策',
+  link: T('Ver política', 'View policy', 'Voir la politique', '查看政策'),
+  note: T(
+    'No incluyas datos sensibles, documentos de identidad ni información reservada en este formulario.',
+    'Do not include sensitive data, identity documents or privileged information in this form.',
+    'N’incluez pas de données sensibles, de documents d’identité ni d’informations confidentielles dans ce formulaire.',
+    '请勿在此表单中填写敏感数据、身份证件或保密信息。',
+  ),
+  promise: T(
+    'Respondemos en menos de 24 horas hábiles. Tu consulta es confidencial.',
+    'We reply within 24 business hours. Your inquiry is confidential.',
+    'Nous répondons sous 24 heures ouvrables. Votre demande reste confidentielle.',
+    '我们在 24 个工作小时内回复，您的咨询将严格保密。',
+  ),
+};
+
+const submitCopy = {
+  submit: T(
+    'Enviar Consulta a TuPlus Abogados',
+    'Send Inquiry to TuPlus Abogados',
+    'Envoyer votre demande à TuPlus Abogados',
+    '向 TuPlus Abogados 发送咨询',
+  ),
+  sending: T('Enviando…', 'Sending…', 'Envoi en cours…', '正在发送……'),
+  subject: T('Consulta desde el sitio web', 'Inquiry from the website', 'Demande depuis le site web', '来自网站的咨询'),
+  general: T('Consulta General', 'General Inquiry', 'Demande générale', '一般咨询'),
+  labels: {
+    name: T('Nombre', 'Name', 'Nom', '姓名'),
+    email: T('Correo', 'Email', 'E-mail', '邮箱'),
+    phone: T('Teléfono', 'Phone', 'Téléphone', '电话'),
+    specialty: T('Área', 'Area', 'Domaine', '领域'),
+    message: T('Consulta', 'Inquiry', 'Demande', '咨询'),
   },
-  note: {
-    es: 'No incluyas datos sensibles, documentos de identidad ni información reservada en este formulario.',
-    en: 'Do not include sensitive data, identity documents or privileged information in this form.',
-    fr: 'N’incluez pas de données sensibles, de documents d’identité ni d’informations confidentielles dans ce formulaire.',
-    zh: '请勿在此表单中填写敏感数据、身份证件或保密信息。',
-  },
-  promise: {
-    es: 'Respondemos en menos de 24 horas hábiles. Tu consulta es confidencial.',
-    en: 'We reply within 24 business hours. Your inquiry is confidential.',
-    fr: 'Nous répondons sous 24 heures ouvrables. Votre demande reste confidentielle.',
-    zh: '我们在 24 个工作小时内回复，您的咨询将严格保密。',
+  status: {
+    sent: T(
+      '¡Gracias! Hemos recibido tu consulta. Te responderemos en menos de 24 horas hábiles.',
+      'Thank you! We have received your inquiry and will reply within 24 business hours.',
+      'Merci ! Nous avons bien reçu votre demande et vous répondrons sous 24 heures ouvrables.',
+      '谢谢！我们已收到您的咨询，并将在 24 个工作小时内回复。',
+    ),
+    error: T(
+      'No pudimos enviar tu consulta. Inténtalo de nuevo o escríbenos a contacto@tuplusabogados.com.pe.',
+      'We could not send your inquiry. Please try again or email us at contacto@tuplusabogados.com.pe.',
+      'Nous n’avons pas pu envoyer votre demande. Réessayez ou écrivez-nous à contacto@tuplusabogados.com.pe.',
+      '无法发送您的咨询。请重试或发送邮件至 contacto@tuplusabogados.com.pe。',
+    ),
+    email: T(
+      'Abrimos tu cliente de correo. Si no se abre, escríbenos a contacto@tuplusabogados.com.pe.',
+      'We opened your email client. If it does not open, email us at contacto@tuplusabogados.com.pe.',
+      'Nous avons ouvert votre client de messagerie. S’il ne s’ouvre pas, écrivez-nous à contacto@tuplusabogados.com.pe.',
+      '已打开您的邮件客户端。如未打开，请发送邮件至 contacto@tuplusabogados.com.pe。',
+    ),
+    invalid: T(
+      'Completa tu nombre, un correo válido y el detalle de la consulta. No se aceptan solo espacios en blanco.',
+      'Please complete your name, a valid email and the details of your inquiry. Blank spaces alone are not accepted.',
+      'Veuillez indiquer votre nom, un e-mail valide et le détail de votre demande. Les espaces vides ne sont pas acceptés.',
+      '请填写姓名、有效邮箱及咨询详情。不接受仅含空格的内容。',
+    ),
   },
 };
 
 export default function Contacto() {
   const lang = useLanguage();
+  const formRef = useRef(null);
   const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [status, setStatus] = useState('idle');
+
+  const clearStatus = () => {
+    if (status !== 'idle' && status !== 'sending') setStatus('idle');
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const data = new FormData(form);
+
+    const nombre = String(data.get('nombre') ?? '').trim();
+    const email = String(data.get('email') ?? '').trim();
+    const telefono = String(data.get('telefono') ?? '').trim();
+    const especialidad = String(data.get('especialidad') ?? '').trim();
+    const mensaje = String(data.get('mensaje') ?? '').trim();
+
+    if (!nombre || !email || !mensaje) {
+      setStatus('invalid');
+      return;
+    }
+
+    data.set('nombre', nombre);
+    data.set('email', email);
+    data.set('telefono', telefono);
+    data.set('especialidad', especialidad);
+    data.set('mensaje', mensaje);
+
+    if (!hasFormspree) {
+      const subject = `${pick(submitCopy.subject, lang)} — ${especialidad || pick(submitCopy.general, lang)}`;
+      const body = [
+        `${pick(submitCopy.labels.name, lang)}: ${nombre}`,
+        `${pick(submitCopy.labels.email, lang)}: ${email}`,
+        `${pick(submitCopy.labels.phone, lang)}: ${telefono}`,
+        `${pick(submitCopy.labels.specialty, lang)}: ${especialidad}`,
+        '',
+        `${pick(submitCopy.labels.message, lang)}:`,
+        mensaje,
+      ].join('\n');
+
+      window.location.href = `mailto:contacto@tuplusabogados.com.pe?subject=${encodeURIComponent(
+        subject,
+      )}&body=${encodeURIComponent(body)}`;
+      setStatus('email');
+      return;
+    }
+
+    setStatus('sending');
+
+    try {
+      const response = await fetch(formspreeUrl, {
+        method: 'POST',
+        body: data,
+        headers: { Accept: 'application/json' },
+      });
+
+      if (!response.ok) throw new Error('Formspree request failed');
+
+      form.reset();
+      setStatus('sent');
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  const statusClass =
+    status === 'sent'
+      ? 'ok'
+      : status === 'error' || status === 'invalid'
+        ? 'error'
+        : status === 'email'
+          ? 'info'
+          : '';
+
+  const statusMessage = status === 'idle' || status === 'sending' ? '' : pick(submitCopy.status[status], lang);
 
   return (
     <section className="section-secondary" id="contacto">
@@ -80,10 +200,20 @@ export default function Contacto() {
             </div>
           </div>
 
-          <form action={formspreeUrl} className="calculator-container form-reset" method="POST">
+          <form
+            action={formspreeUrl || undefined}
+            className="calculator-container form-reset"
+            method="post"
+            onSubmit={handleSubmit}
+            ref={formRef}
+          >
+            <input type="hidden" name="_subject" value={pick(submitCopy.subject, lang)} />
+            <input type="hidden" name="origen" value="Formulario de contacto web" />
+
             <div className="form-group">
               <label htmlFor="nombre" data-lang="form_name">Nombre Completo / Razón Social</label>
               <input
+                autoComplete="name"
                 className="form-control"
                 data-placeholder-en="E.g.: John Doe / Company LLC"
                 data-placeholder-es="Ej: Juan Pérez / Empresa S.A.C."
@@ -91,6 +221,7 @@ export default function Contacto() {
                 data-placeholder-zh="例如：张伟 / 某某有限公司"
                 id="nombre"
                 name="nombre"
+                onChange={clearStatus}
                 placeholder="Ej: Juan Pérez / Empresa S.A.C."
                 required
                 type="text"
@@ -99,9 +230,11 @@ export default function Contacto() {
             <div className="form-group">
               <label htmlFor="email" data-lang="form_email">Correo Electrónico</label>
               <input
+                autoComplete="email"
                 className="form-control"
                 id="email"
                 name="email"
+                onChange={clearStatus}
                 placeholder="correo@empresa.com"
                 required
                 type="email"
@@ -110,37 +243,36 @@ export default function Contacto() {
             <div className="form-group">
               <label htmlFor="telefono" data-lang="form_phone">Teléfono / WhatsApp</label>
               <input
+                autoComplete="tel"
                 className="form-control"
                 id="telefono"
+                inputMode="tel"
+                maxLength={24}
                 name="telefono"
+                onChange={clearStatus}
+                onInput={(event) => {
+                  const input = event.currentTarget;
+                  const cleaned = input.value.replace(/[^\d+\s().-]/g, '');
+                  if (cleaned !== input.value) input.value = cleaned;
+                }}
                 placeholder="+51 999 888 777"
                 type="tel"
               />
             </div>
             <div className="form-group">
               <label htmlFor="especialidad" data-lang="form_spec">Área de Consulta / Especialidad</label>
-              <select className="form-control" id="especialidad" name="especialidad">
-                <option data-en="Corporate Law" data-es="Derecho Corporativo" data-fr="Droit des sociétés" data-zh="公司法" value="Derecho Corporativo">
-                  Derecho Corporativo
-                </option>
-                <option data-en="Litigation &amp; Arbitration" data-es="Litigios y Arbitraje" data-fr="Contentieux &amp; arbitrage" data-zh="诉讼与仲裁" value="Litigios y Arbitraje">
-                  Litigios y Arbitraje
-                </option>
-                <option data-en="Economic Criminal Law" data-es="Derecho Penal Económico" data-fr="Droit pénal des affaires" data-zh="经济刑法" value="Derecho Penal Económico">
-                  Derecho Penal Económico
-                </option>
-                <option data-en="Real Estate Law" data-es="Derecho Inmobiliario" data-fr="Droit immobilier" data-zh="房地产法" value="Derecho Inmobiliario">
-                  Derecho Inmobiliario
-                </option>
-                <option data-en="Labor Law" data-es="Derecho Laboral" data-fr="Droit du travail" data-zh="劳动法" value="Derecho Laboral">
-                  Derecho Laboral
-                </option>
-                <option data-en="Tax Law" data-es="Derecho Tributario" data-fr="Droit fiscal" data-zh="税法" value="Derecho Tributario">
-                  Derecho Tributario
-                </option>
-                <option data-en="General Inquiry" data-es="Consulta General" data-fr="Demande générale" data-zh="一般咨询" value="Consulta General">
-                  Consulta General
-                </option>
+              <select
+                className="form-control"
+                id="especialidad"
+                name="especialidad"
+                onChange={clearStatus}
+              >
+                {PRACTICE_AREAS.map((area) => (
+                  <option key={area.slug} value={pick(area.title, lang)}>
+                    {pick(area.title, lang)}
+                  </option>
+                ))}
+                <option value={pick(submitCopy.general, lang)}>{pick(submitCopy.general, lang)}</option>
               </select>
             </div>
             <div className="form-group">
@@ -153,6 +285,7 @@ export default function Contacto() {
                 data-placeholder-zh="请简要描述您的法律情况……"
                 id="mensaje"
                 name="mensaje"
+                onChange={clearStatus}
                 placeholder="Describa brevemente su situación jurídica..."
                 required
                 rows="4"
@@ -177,9 +310,18 @@ export default function Contacto() {
                 </button>
               </div>
             </div>
-            <button className="btn-gold btn-full" data-lang="form_btn" type="submit">
-              Enviar Consulta a TuPlus Abogados
+            <button className="btn-gold btn-full" type="submit" disabled={status === 'sending'}>
+              {status === 'sending' ? pick(submitCopy.sending, lang) : pick(submitCopy.submit, lang)}
             </button>
+
+            <p
+              className={`contact-status${statusClass ? ` contact-status--${statusClass}` : ''}`}
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              {statusMessage}
+            </p>
           </form>
         </div>
       </div>

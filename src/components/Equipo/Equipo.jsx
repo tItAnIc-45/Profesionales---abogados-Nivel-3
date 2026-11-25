@@ -135,7 +135,7 @@ const abogadosList = [
     id: 1,
     nombre: 'MATEO ALEJANDRO VALDIVIA RIVERA',
     email: 'mateo.valdivia@tuplusabogados.com.pe',
-    img: '/assets/team-1.jpg',
+    img: null,
     cargo: { es: 'SOCIO FUNDADOR', en: 'FOUNDING PARTNER', fr: 'ASSOCIÉ FONDATEUR', zh: '创始合伙人' },
     bio: {
       es: {
@@ -238,7 +238,7 @@ const abogadosList = [
     id: 2,
     nombre: 'MARTÍN ALONSO PAREDES ROJAS',
     email: 'martin.paredes@tuplusabogados.com.pe',
-    img: '/assets/team-2.jpg',
+    img: null,
     cargo: { es: 'SOCIO', en: 'PARTNER', fr: 'ASSOCIÉ', zh: '合伙人' },
     bio: {
       es: {
@@ -297,7 +297,7 @@ const abogadosList = [
     id: 3,
     nombre: 'SOFÍA VALERIA CAMPOS HUAMÁN',
     email: 'sofia.campos@tuplusabogados.com.pe',
-    img: '/assets/team-3.jpg',
+    img: null,
     cargo: { es: 'ASOCIADA PRINCIPAL', en: 'PRINCIPAL ASSOCIATE', fr: 'ASSOCIÉE PRINCIPALE', zh: '首席律师' },
     bio: {
       es: {
@@ -349,7 +349,7 @@ const abogadosList = [
     id: 4,
     nombre: 'DIEGO ARMANDO SILVA GUEVARA',
     email: 'diego.silva@tuplusabogados.com.pe',
-    img: '/assets/team-1.jpg',
+    img: null,
     cargo: { es: 'ASOCIADO SENIOR', en: 'SENIOR ASSOCIATE', fr: 'ASSOCIÉ SENIOR', zh: '资深律师' },
     bio: {
       es: {
@@ -392,7 +392,7 @@ const abogadosList = [
     id: 5,
     nombre: 'ANDREA LUCÍA MENDOZA SALAZAR',
     email: 'andrea.mendoza@tuplusabogados.com.pe',
-    img: '/assets/team-3.jpg',
+    img: null,
     cargo: { es: 'ASOCIADA', en: 'ASSOCIATE', fr: 'ASSOCIÉE', zh: '律师' },
     bio: {
       es: {
@@ -435,7 +435,7 @@ const abogadosList = [
     id: 6,
     nombre: 'GABRIEL IGNACIO ROJAS NAVARRO',
     email: 'gabriel.rojas@tuplusabogados.com.pe',
-    img: '/assets/team-2.jpg',
+    img: null,
     cargo: { es: 'CONSULTOR JUNIOR', en: 'JUNIOR CONSULTANT', fr: 'CONSULTANT JUNIOR', zh: '初级顾问' },
     bio: {
       es: {
