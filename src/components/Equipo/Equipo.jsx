@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
+import { EXTRA_LAWYERS } from '../../data/lawyersExtra';
+import { LAWYER_PROFILES } from '../../data/lawyerProfiles';
+import { PRACTICE_AREAS, SPECIALTY_OPTIONS } from '../../data/practiceAreas';
 import './Equipo.css';
 
-function getInitials(name = '') {
+export function getInitials(name = '') {
   const parts = name.trim().split(/\s+/).filter(Boolean);
   if (parts.length === 0) return 'TP';
   if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
@@ -11,6 +15,14 @@ function getInitials(name = '') {
   // Nombre + primer apellido (el último término suele ser el segundo apellido).
   return `${parts[0][0]}${parts[parts.length - 2][0]}`.toUpperCase();
 }
+
+const normalize = (value = '') =>
+  value
+    .toString()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
 
 const ui = {
   sub: {
@@ -65,6 +77,8 @@ const ui = {
   },
   docencia: { es: 'Docencia:', en: 'Teaching:', fr: 'Enseignement :', zh: '教学经历：' },
   idiomas: { es: 'Idiomas:', en: 'Languages:', fr: 'Langues :', zh: '语言：' },
+  perfil: { es: 'Perfil profesional:', en: 'Professional profile:', fr: 'Profil professionnel :', zh: '专业简介：' },
+  enfoque: { es: 'Enfoque de práctica:', en: 'Practice focus:', fr: 'Axes de pratique :', zh: '业务重点：' },
   noResults: {
     es: 'No se encontraron resultados para la búsqueda.',
     en: 'No results found for the search.',
@@ -76,6 +90,36 @@ const ui = {
     en: 'Send email',
     fr: 'Envoyer un e-mail',
     zh: '发送邮件',
+  },
+  requestConsultation: {
+    es: 'Solicitar consulta',
+    en: 'Request a consultation',
+    fr: 'Demander une consultation',
+    zh: '预约咨询',
+  },
+  filterLabel: {
+    es: 'Filtrar por especialidad',
+    en: 'Filter by specialty',
+    fr: 'Filtrer par spécialité',
+    zh: '按专业领域筛选',
+  },
+  allSpecialties: {
+    es: 'Todas las especialidades',
+    en: 'All specialties',
+    fr: 'Toutes les spécialités',
+    zh: '全部专业领域',
+  },
+  specialties: {
+    es: 'Especialidades:',
+    en: 'Specialties:',
+    fr: 'Spécialités :',
+    zh: '专业领域：',
+  },
+  results: {
+    es: 'profesionales',
+    en: 'professionals',
+    fr: 'professionnels',
+    zh: '位专业人士',
   },
 };
 
@@ -91,7 +135,7 @@ const abogadosList = [
     id: 1,
     nombre: 'MATEO ALEJANDRO VALDIVIA RIVERA',
     email: 'mateo.valdivia@tuplusabogados.com.pe',
-    img: '/assets/team-1.jpg',
+    img: null,
     cargo: { es: 'SOCIO FUNDADOR', en: 'FOUNDING PARTNER', fr: 'ASSOCIÉ FONDATEUR', zh: '创始合伙人' },
     bio: {
       es: {
@@ -194,7 +238,7 @@ const abogadosList = [
     id: 2,
     nombre: 'MARTÍN ALONSO PAREDES ROJAS',
     email: 'martin.paredes@tuplusabogados.com.pe',
-    img: '/assets/team-2.jpg',
+    img: null,
     cargo: { es: 'SOCIO', en: 'PARTNER', fr: 'ASSOCIÉ', zh: '合伙人' },
     bio: {
       es: {
@@ -253,7 +297,7 @@ const abogadosList = [
     id: 3,
     nombre: 'SOFÍA VALERIA CAMPOS HUAMÁN',
     email: 'sofia.campos@tuplusabogados.com.pe',
-    img: '/assets/team-3.jpg',
+    img: null,
     cargo: { es: 'ASOCIADA PRINCIPAL', en: 'PRINCIPAL ASSOCIATE', fr: 'ASSOCIÉE PRINCIPALE', zh: '首席律师' },
     bio: {
       es: {
@@ -305,7 +349,7 @@ const abogadosList = [
     id: 4,
     nombre: 'DIEGO ARMANDO SILVA GUEVARA',
     email: 'diego.silva@tuplusabogados.com.pe',
-    img: '/assets/team-1.jpg',
+    img: null,
     cargo: { es: 'ASOCIADO SENIOR', en: 'SENIOR ASSOCIATE', fr: 'ASSOCIÉ SENIOR', zh: '资深律师' },
     bio: {
       es: {
@@ -348,7 +392,7 @@ const abogadosList = [
     id: 5,
     nombre: 'ANDREA LUCÍA MENDOZA SALAZAR',
     email: 'andrea.mendoza@tuplusabogados.com.pe',
-    img: '/assets/team-3.jpg',
+    img: null,
     cargo: { es: 'ASOCIADA', en: 'ASSOCIATE', fr: 'ASSOCIÉE', zh: '律师' },
     bio: {
       es: {
@@ -391,7 +435,7 @@ const abogadosList = [
     id: 6,
     nombre: 'GABRIEL IGNACIO ROJAS NAVARRO',
     email: 'gabriel.rojas@tuplusabogados.com.pe',
-    img: '/assets/team-2.jpg',
+    img: null,
     cargo: { es: 'CONSULTOR JUNIOR', en: 'JUNIOR CONSULTANT', fr: 'CONSULTANT JUNIOR', zh: '初级顾问' },
     bio: {
       es: {
@@ -432,10 +476,65 @@ const abogadosList = [
   },
 ];
 
+// Los seis perfiles históricos se integran al mismo esquema del resto del
+// equipo para que el filtro por especialidad funcione de forma uniforme.
+const EXISTING_SPECIALTIES = {
+  1: ['civil-comercial'],
+  2: ['civil-comercial'],
+  3: ['civil-comercial'],
+  4: ['civil-comercial'],
+  5: ['inmobiliario', 'civil-comercial'],
+  6: ['civil-comercial'],
+};
+
+export const TEAM = [
+  ...abogadosList.map((abogado) => ({
+    ...abogado,
+    specialties: EXISTING_SPECIALTIES[abogado.id] ?? [],
+  })),
+  ...EXTRA_LAWYERS,
+].map((abogado) => ({
+  ...abogado,
+  ...(LAWYER_PROFILES[abogado.id] ?? {}),
+}));
+
+const specialtyTitleBySlug = (slug) => {
+  const area = PRACTICE_AREAS.find((item) => item.slug === slug);
+  return area ? area.title : null;
+};
+
 export default function Equipo() {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialSpecialty = SPECIALTY_OPTIONS.some(
+    (option) => option.value === searchParams.get('especialidad'),
+  )
+    ? searchParams.get('especialidad')
+    : 'all';
   const [searchTerm, setSearchTerm] = useState('');
+  const [specialty, setSpecialty] = useState(initialSpecialty);
   const [selectedAbogado, setSelectedAbogado] = useState(null);
   const lang = useLanguage();
+
+  // Mantiene el filtro sincronizado si se llega desde un enlace como
+  // /equipo?especialidad=penal o si cambia la URL con el componente montado.
+  useEffect(() => {
+    const param = searchParams.get('especialidad');
+    const nextSpecialty = SPECIALTY_OPTIONS.some((option) => option.value === param)
+      ? param
+      : 'all';
+    setSpecialty((current) => (current === nextSpecialty ? current : nextSpecialty));
+  }, [searchParams]);
+
+  const handleSpecialtyChange = (value) => {
+    setSpecialty(value);
+    const nextParams = new URLSearchParams(searchParams);
+    if (value === 'all') {
+      nextParams.delete('especialidad');
+    } else {
+      nextParams.set('especialidad', value);
+    }
+    setSearchParams(nextParams, { replace: true });
+  };
 
   const t = {
     sub: pick(ui.sub, lang),
@@ -450,8 +549,15 @@ export default function Equipo() {
     membresias: pick(ui.membresias, lang),
     docencia: pick(ui.docencia, lang),
     idiomas: pick(ui.idiomas, lang),
+    perfil: pick(ui.perfil, lang),
+    enfoque: pick(ui.enfoque, lang),
+    requestConsultation: pick(ui.requestConsultation, lang),
     noResults: pick(ui.noResults, lang),
     sendEmail: pick(ui.sendEmail, lang),
+    filterLabel: pick(ui.filterLabel, lang),
+    allSpecialties: pick(ui.allSpecialties, lang),
+    specialties: pick(ui.specialties, lang),
+    results: pick(ui.results, lang),
   };
 
   // Bloquea el scroll del fondo y permite cerrar con Escape.
@@ -472,12 +578,20 @@ export default function Equipo() {
     };
   }, [selectedAbogado]);
 
-  const filteredAbogados = abogadosList.filter((abogado) => {
-    const term = searchTerm.toLowerCase();
-    return (
-      abogado.nombre.toLowerCase().includes(term) ||
-      pick(abogado.cargo, lang).toLowerCase().includes(term)
-    );
+  const filteredAbogados = TEAM.filter((abogado) => {
+    const term = normalize(searchTerm);
+    const matchesText =
+      !term ||
+      normalize(abogado.nombre).includes(term) ||
+      normalize(pick(abogado.cargo, lang)).includes(term) ||
+      abogado.specialties.some((slug) =>
+        normalize(pick(specialtyTitleBySlug(slug) ?? {}, lang)).includes(term),
+      );
+
+    const matchesSpecialty =
+      specialty === 'all' || abogado.specialties.includes(specialty);
+
+    return matchesText && matchesSpecialty;
   });
 
   const bio = selectedAbogado
@@ -485,6 +599,8 @@ export default function Equipo() {
         ...selectedAbogado,
         ...(selectedAbogado.bio[lang] ?? selectedAbogado.bio.es),
         cargo: pick(selectedAbogado.cargo, lang),
+        resumen: selectedAbogado.resumen ? pick(selectedAbogado.resumen, lang) : '',
+        enfoque: selectedAbogado.enfoque ? pick(selectedAbogado.enfoque, lang) : [],
       }
     : null;
 
@@ -503,18 +619,47 @@ export default function Equipo() {
             {t.desc}
           </p>
 
-          {/* BUSCADOR */}
-          <div className="equipo-search">
-            <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-            <input
-              type="text"
-              className="search-input"
-              placeholder={t.searchPlaceholder}
-              aria-label={t.searchPlaceholder}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+          {/* BUSCADOR + FILTRO POR ESPECIALIDAD */}
+          <div className="equipo-filters">
+            <div className="equipo-search">
+              <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
+              <input
+                type="text"
+                className="search-input"
+                placeholder={t.searchPlaceholder}
+                aria-label={t.searchPlaceholder}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <div className="equipo-specialty">
+              <label htmlFor="specialtyFilter" className="equipo-specialty-label">
+                <i className="fa-solid fa-filter" aria-hidden="true" />
+                {t.filterLabel}
+              </label>
+              <div className="select-wrap">
+                <select
+                  id="specialtyFilter"
+                  className="specialty-select"
+                  value={specialty}
+                  onChange={(e) => handleSpecialtyChange(e.target.value)}
+                >
+                  <option value="all">{t.allSpecialties}</option>
+                  {SPECIALTY_OPTIONS.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {pick(option.label, lang)}
+                    </option>
+                  ))}
+                </select>
+                <i className="fa-solid fa-chevron-down" aria-hidden="true" />
+              </div>
+            </div>
           </div>
+
+          <p className="equipo-results" role="status" aria-live="polite">
+            {filteredAbogados.length} {t.results}
+          </p>
         </div>
 
         {/* GRID DE TARJETAS */}
@@ -526,16 +671,18 @@ export default function Equipo() {
                 <span className="abogado-monogram" aria-hidden="true">
                   {getInitials(abogado.nombre)}
                 </span>
-                <img
-                  src={abogado.img}
-                  alt={abogado.nombre}
-                  loading="lazy"
-                  decoding="async"
-                  onLoad={(e) => e.currentTarget.classList.add('is-loaded')}
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
+                {abogado.img && (
+                  <img
+                    src={abogado.img}
+                    alt={abogado.nombre}
+                    loading="lazy"
+                    decoding="async"
+                    onLoad={(e) => e.currentTarget.classList.add('is-loaded')}
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                )}
               </div>
               <div className="abogado-card-body">
                 <span className="socio-tag">{pick(abogado.cargo, lang)}</span>
@@ -544,6 +691,19 @@ export default function Equipo() {
                   <i className="fa-solid fa-envelope" aria-hidden="true" />
                   <span>{abogado.email}</span>
                 </div>
+                <ul className="abogado-specialties" aria-label={t.specialties}>
+                  {abogado.specialties.map((slug) => {
+                    const title = specialtyTitleBySlug(slug);
+                    return title ? (
+                      <li key={slug} className="specialty-pill">
+                        {pick(title, lang)}
+                      </li>
+                    ) : null;
+                  })}
+                </ul>
+                {abogado.resumen && (
+                  <p className="abogado-summary">{pick(abogado.resumen, lang)}</p>
+                )}
                 <div className="card-social-actions">
                   <button
                     type="button"
@@ -605,70 +765,105 @@ export default function Equipo() {
             </div>
 
             <div className="modal-custom-body">
-              {bio.formacion && bio.formacion.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.formacion}</h3>
-                  {bio.formacion.map((item, idx) => (
-                    <p key={idx}>{item}</p>
-                  ))}
-                </div>
-              )}
+              {bio.resumen && <p className="bio-lead">{bio.resumen}</p>}
 
-              {bio.experiencia && bio.experiencia.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.experiencia}</h3>
-                  {bio.experiencia.map((item, idx) => (
-                    <p key={idx}>{item}</p>
-                  ))}
-                </div>
-              )}
+              <div className="bio-grid">
+                {bio.specialties && bio.specialties.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.specialties}</h3>
+                    <ul className="modal-specialty-list">
+                      {bio.specialties.map((slug) => {
+                        const title = specialtyTitleBySlug(slug);
+                        return title ? <li key={slug}>{pick(title, lang)}</li> : null;
+                      })}
+                    </ul>
+                  </div>
+                )}
 
-              {bio.publicaciones && bio.publicaciones.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.publicaciones}</h3>
-                  <ul>
-                    {bio.publicaciones.map((item, idx) => (
-                      <li key={idx}>{item}</li>
+                {bio.enfoque && bio.enfoque.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.enfoque}</h3>
+                    <ul>
+                      {bio.enfoque.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {bio.formacion && bio.formacion.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.formacion}</h3>
+                    {bio.formacion.map((item, idx) => (
+                      <p key={idx}>{item}</p>
                     ))}
-                  </ul>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {bio.membresias && bio.membresias.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.membresias}</h3>
-                  <ul>
-                    {bio.membresias.map((item, idx) => (
-                      <li key={idx}>{item}</li>
+                {bio.experiencia && bio.experiencia.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.experiencia}</h3>
+                    {bio.experiencia.map((item, idx) => (
+                      <p key={idx}>{item}</p>
                     ))}
-                  </ul>
-                </div>
-              )}
+                  </div>
+                )}
 
-              {bio.docencia && bio.docencia.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.docencia}</h3>
-                  <ul>
-                    {bio.docencia.map((item, idx) => (
-                      <li key={idx}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                {bio.publicaciones && bio.publicaciones.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.publicaciones}</h3>
+                    <ul>
+                      {bio.publicaciones.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
 
-              {bio.idiomas && bio.idiomas.length > 0 && (
-                <div className="bio-block">
-                  <h3>{t.idiomas}</h3>
-                  <ul>
-                    {bio.idiomas.map((item, idx) => (
-                      <li key={idx}>{item}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                {bio.membresias && bio.membresias.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.membresias}</h3>
+                    <ul>
+                      {bio.membresias.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {bio.docencia && bio.docencia.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.docencia}</h3>
+                    <ul>
+                      {bio.docencia.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {bio.idiomas && bio.idiomas.length > 0 && (
+                  <div className="bio-block">
+                    <h3>{t.idiomas}</h3>
+                    <ul>
+                      {bio.idiomas.map((item, idx) => (
+                        <li key={idx}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="modal-custom-footer">
+              <Link
+                className="btn-gold btn-modal-consulta"
+                to="/contacto"
+                onClick={() => setSelectedAbogado(null)}
+              >
+                {t.requestConsultation}
+                <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+              </Link>
               <button className="btn-modal-cerrar" onClick={() => setSelectedAbogado(null)}>
                 {t.close}
               </button>

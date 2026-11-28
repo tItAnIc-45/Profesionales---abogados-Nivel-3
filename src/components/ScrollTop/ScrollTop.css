@@ -9,7 +9,7 @@
   height: 48px;
   border: 1px solid var(--border-glow);
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold) 55%, var(--accent-gold-dark));
+  background: linear-gradient(135deg, var(--gold-fill-light), var(--gold-fill) 55%, var(--gold-fill-dark));
   color: #0a0f18;
   font-size: 1rem;
   cursor: pointer;
@@ -33,4 +33,13 @@
 .btn-scroll-top-left:hover {
   transform: translateY(-3px);
   box-shadow: 0 20px 40px rgba(212, 175, 55, 0.42);
+}
+
+@media (max-width: 960px) {
+  .btn-scroll-top-left {
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+    left: 14px;
+    width: 42px;
+    height: 42px;
+  }
 }

@@ -177,4 +177,14 @@
   .lang-chevron {
     display: none;
   }
+
+  /* En pantallas muy estrechas el panel se ancla al viewport para no
+     salirse por la izquierda cuando el selector queda cerca del logo. */
+  .lang-panel {
+    position: fixed;
+    top: calc(var(--header-h) + 0.4rem);
+    right: 0.75rem;
+    left: 0.75rem;
+    width: auto;
+  }
 }

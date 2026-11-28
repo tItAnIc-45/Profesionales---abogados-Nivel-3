@@ -15,7 +15,7 @@ const footerMarkup = `<footer>
 <li><a data-lang="nav_firm" href="/la-firma">La Firma</a></li>
 <li><a data-lang="nav_practices" href="/areas">Áreas de Práctica</a></li>
 <li><a data-lang="nav_team" href="/equipo">Nuestros Abogados</a></li>
-<li><a data-lang="nav_calculator" href="/cotizador">Calculadora Legal</a></li>
+<li><a data-lang="nav_calculator" href="/cotizador">Servicios y Honorarios</a></li>
 </ul>
 </div>
 <div>

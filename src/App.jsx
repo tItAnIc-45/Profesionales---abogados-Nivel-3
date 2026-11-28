@@ -2,13 +2,16 @@ import { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import './index.css';
 import Navbar from './components/Navbar/Navbar';
-import Banner from './components/Banner/Banner';
 import LaFirma from './components/LaFirma/LaFirma';
 import Practicas from './components/Practicas/Practicas';
+import AreaDetalle from './components/AreaDetalle/AreaDetalle';
 import Equipo from './components/Equipo/Equipo';
 import Cotizador from './components/Cotizador/Cotizador';
 import Contacto from './components/Contacto/Contacto';
+import Home from './components/Home/Home';
 import WhatsappFloat from './components/WhatsappFloat/WhatsappFloat';
+import MobileCta from './components/MobileCta/MobileCta';
+import { getPracticeArea } from './data/practiceAreas';
 
 import Footer from './components/Footer/Footer';
 import Legal from './components/Legal/Legal';
@@ -17,7 +20,6 @@ import './responsive/responsive.css'; // debe ir después de los CSS de los comp
 import useLanguage, { readLanguage } from './i18n/useLanguage';
 import { pick } from './i18n/languages';
 import './scripts/main.js';
-import './scripts/calculator.js';
 
 const pageTitles = {
   '/': {
@@ -45,10 +47,10 @@ const pageTitles = {
     zh: '团队 | TuPlus Abogados',
   },
   '/cotizador': {
-    es: 'Cotizador | TuPlus Abogados',
-    en: 'Calculator | TuPlus Abogados',
-    fr: 'Estimateur | TuPlus Abogados',
-    zh: '费用估算 | TuPlus Abogados',
+    es: 'Servicios y Honorarios | TuPlus Abogados',
+    en: 'Services & Fees | TuPlus Abogados',
+    fr: 'Services et honoraires | TuPlus Abogados',
+    zh: '服务与收费 | TuPlus Abogados',
   },
   '/contacto': {
     es: 'Contacto | TuPlus Abogados',
@@ -77,17 +79,16 @@ const skipLabels = {
   zh: '跳至主要内容',
 };
 
-function Home() {
-  return (
-    <>
-      <Banner />
-      <LaFirma />
-      <Practicas />
-      <Equipo />
-      <Cotizador />
-      <Contacto />
-    </>
-  );
+function getPageTitle(pathname, lang) {
+  const exact = pageTitles[pathname];
+  if (exact) return pick(exact, lang);
+
+  if (pathname.startsWith('/areas/')) {
+    const area = getPracticeArea(pathname.replace('/areas/', ''));
+    if (area) return `${pick(area.title, lang)} | TuPlus Abogados`;
+  }
+
+  return 'TuPlus Abogados';
 }
 
 export default function App() {
@@ -110,7 +111,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    document.title = pick(pageTitles[pathname], lang) || 'TuPlus Abogados';
+    document.title = getPageTitle(pathname, lang);
     if (!hash) {
       window.scrollTo({ top: 0, behavior: 'auto' });
     }
@@ -164,6 +165,7 @@ export default function App() {
 
       <Navbar />
       <WhatsappFloat />
+      <MobileCta />
       <ScrollTop />
 
       <main id="main">
@@ -171,6 +173,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/la-firma" element={<LaFirma />} />
           <Route path="/areas" element={<Practicas />} />
+          <Route path="/areas/:slug" element={<AreaDetalle />} />
           <Route path="/equipo" element={<Equipo />} />
           <Route path="/cotizador" element={<Cotizador />} />
           <Route path="/contacto" element={<Contacto />} />

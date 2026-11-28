@@ -100,6 +100,56 @@
   margin-bottom: 1.25rem;
 }
 
+.contact-promise {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+  padding: 0.5rem 0.9rem;
+  background: color-mix(in srgb, var(--accent-gold) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent-gold) 22%, transparent);
+  border-radius: var(--r-pill);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.contact-promise i {
+  color: var(--accent-gold);
+}
+
+/* Mensaje de estado del formulario --------------------------------------- */
+
+.contact-status {
+  margin: 0.9rem 0 0;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--r-sm);
+  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+  font-size: 0.85rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+.contact-status:empty {
+  display: none;
+}
+
+.contact-status--ok {
+  color: color-mix(in srgb, #16a34a 72%, var(--text-light));
+  border-color: color-mix(in srgb, #16a34a 32%, transparent);
+}
+
+.contact-status--error {
+  color: color-mix(in srgb, #dc2626 72%, var(--text-light));
+  border-color: color-mix(in srgb, #dc2626 32%, transparent);
+}
+
+.contact-status--info {
+  color: var(--accent-gold);
+  border-color: color-mix(in srgb, var(--accent-gold) 32%, transparent);
+}
+
 @media (max-width: 992px) {
   .contact-grid {
     grid-template-columns: minmax(0, 1fr);

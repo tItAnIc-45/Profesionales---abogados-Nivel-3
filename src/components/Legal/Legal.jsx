@@ -2,7 +2,17 @@ import { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import useLanguage from '../../i18n/useLanguage';
 import { pick } from '../../i18n/languages';
+import { PRIVACY_INTRO, PRIVACY_SECTIONS, PRIVACY_UPDATED } from '../../data/privacyPolicy';
 import './Legal.css';
+
+const privacyBody = [
+  { type: 'p', text: PRIVACY_INTRO },
+  { type: 'p', text: PRIVACY_UPDATED },
+  ...PRIVACY_SECTIONS.flatMap((section) => [
+    { type: 'h3', text: section.title },
+    { type: 'p', text: section.body },
+  ]),
+];
 
 const legalSections = [
   {
@@ -75,17 +85,7 @@ const legalSections = [
       fr: 'Engagement absolu envers la protection de vos données personnelles et professionnelles.',
       zh: '对保护您的个人及企业数据的绝对承诺。',
     },
-    body: [
-      {
-        type: 'p',
-        text: {
-          es: 'En TuPlus Abogados valoramos y respetamos su privacidad. Los datos proporcionados a través de nuestros formularios de contacto o calculadora de honorarios son tratados bajo rigurosos estándares de confidencialidad y secreto profesional.',
-          en: 'At TuPlus Abogados we value and respect your privacy. Data provided through our contact forms or fee calculator are handled under strict confidentiality and professional secrecy standards.',
-          fr: 'Chez TuPlus Abogados, nous valorisons et respectons votre vie privée. Les données fournies via nos formulaires de contact ou notre estimateur d’honoraires sont traitées selon des normes strictes de confidentialité et de secret professionnel.',
-          zh: 'TuPlus Abogados 重视并尊重您的隐私。通过联系表单或费用估算器提供的数据，均依照严格的保密与职业守密标准处理。',
-        },
-      },
-    ],
+    body: privacyBody,
   },
   {
     id: 'etica',

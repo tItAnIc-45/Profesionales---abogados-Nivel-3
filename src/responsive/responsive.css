@@ -117,8 +117,7 @@ main > div > section:first-child:not(.hero) {
   }
 
   .firma-grid,
-  .contact-grid,
-  .calc-grid {
+  .contact-grid {
     grid-template-columns: minmax(0, 1fr);
   }
 }
@@ -148,8 +147,8 @@ main > div > section:first-child:not(.hero) {
     padding: 1.4rem;
   }
 
-  .hero-trust {
-    gap: 1.2rem 2rem;
+  .hero-points {
+    gap: 0.55rem 1.2rem;
   }
 }
 
@@ -207,7 +206,7 @@ main > div > section:first-child:not(.hero) {
 
   .btn-scroll-top-left {
     left: 14px;
-    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px));
     width: 44px;
     height: 44px;
   }
@@ -242,13 +241,45 @@ main > div > section:first-child:not(.hero) {
   .section-title {
     font-size: 1.55rem;
   }
+}
 
-  .hero-trust-item strong {
-    font-size: 1.2rem;
+/* --------------------------------------------------------------------------
+   Interacción táctil — áreas de toque cómodas
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 960px) {
+  /* 16px evita el zoom automático de iOS al enfocar un campo. */
+  .form-control {
+    font-size: 1rem;
   }
 
-  .calc-amount {
-    font-size: 2rem;
+  .form-check input[type='checkbox'] {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: 0.1rem;
+  }
+
+  .form-check label {
+    padding-block: 0.18rem;
+  }
+
+  .form-check .privacy-link {
+    padding-block: 0.22rem;
+  }
+
+  .area-breadcrumb a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+  }
+
+  .home-text-link,
+  .service-link,
+  .area-back-link,
+  .area-quote-link,
+  .area-phone,
+  .home-lawyer > a {
+    min-height: 44px;
   }
 }
 
